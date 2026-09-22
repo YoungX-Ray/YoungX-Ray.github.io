@@ -1,0 +1,80 @@
+/* Match the existing step-response widget and Butterfly's theme. */
+#resonance-demo { scroll-margin-top: 90px; }
+second-order-resonance {
+  --sor-accent: #2376d2;
+  --sor-probe: #c46513;
+  --sor-muted: #586980;
+  --sor-grid: #e5eaf1;
+  --sor-panel: #f5f8fc;
+  --sor-border: #dce4ee;
+  display: block;
+  margin: 24px 0;
+  padding: 24px;
+  border: 1px solid var(--sor-border);
+  border-radius: 16px;
+  background: var(--card-bg, #fff);
+  color: var(--font-color, #344256);
+  line-height: 1.6;
+  color-scheme: light;
+}
+[data-theme='dark'] second-order-resonance {
+  --sor-accent: #70b8ff;
+  --sor-probe: #ffb469;
+  --sor-muted: #a7b5c9;
+  --sor-grid: #303c4d;
+  --sor-panel: #1c2633;
+  --sor-border: #354256;
+  color-scheme: dark;
+}
+second-order-resonance * { box-sizing: border-box; }
+second-order-resonance .sor-heading { display: grid; gap: 4px; margin-bottom: 20px; }
+second-order-resonance .sor-heading strong { color: inherit; font-size: 1.12em; }
+second-order-resonance .sor-heading > span { color: var(--sor-muted); font-size: .86em; }
+second-order-resonance .sor-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+second-order-resonance .sor-control { display: block; min-width: 0; padding: 12px 16px; background: var(--sor-panel); border-radius: 10px; }
+second-order-resonance .sor-control > span { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 10px; font-size: .92em; }
+second-order-resonance .sor-drive { grid-column: 1 / -1; }
+second-order-resonance output { color: var(--sor-accent); font-weight: 700; font-variant-numeric: tabular-nums; }
+second-order-resonance .sor-control small { display: block; color: var(--sor-muted); font-size: .78em; }
+second-order-resonance input[type='range'] { display: block; width: 100%; min-height: 30px; margin: 6px 0 2px; padding: 0; accent-color: var(--sor-accent); }
+second-order-resonance .sor-actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 20px; }
+second-order-resonance button { min-height: 36px; padding: 6px 11px; border: 1px solid var(--sor-border); border-radius: 7px; background: var(--card-bg, #fff); color: inherit; font: inherit; font-size: .82em; cursor: pointer; }
+second-order-resonance button:hover:not(:disabled) { border-color: var(--sor-accent); color: var(--sor-accent); background: var(--sor-panel); }
+second-order-resonance button:disabled { opacity: .55; cursor: not-allowed; }
+second-order-resonance :is(button, input, summary):focus-visible { outline: 2px solid var(--sor-accent); outline-offset: 4px; }
+second-order-resonance .sor-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin-bottom: 22px; }
+second-order-resonance .sor-metrics > div { min-width: 0; border-left: 2px solid var(--sor-border); padding-left: 10px; }
+second-order-resonance .sor-metrics span { display: block; font-size: .76em; color: var(--sor-muted); }
+second-order-resonance .sor-metrics strong { display: block; font-size: .94em; color: inherit; font-variant-numeric: tabular-nums; }
+second-order-resonance .sor-chart-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+second-order-resonance .sor-chart-heading strong { color: inherit; font-size: .98em; }
+second-order-resonance .sor-toggle { display: inline-flex; align-items: center; gap: 6px; font-size: .8em; color: var(--sor-muted); }
+second-order-resonance .sor-toggle input { accent-color: var(--sor-accent); }
+second-order-resonance .sor-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 10px 0 0; color: var(--sor-muted); font-size: .77em; }
+second-order-resonance .sor-legend > span { display: inline-flex; align-items: center; gap: 6px; }
+second-order-resonance .sor-legend i { display: inline-block; width: 18px; height: 0; border-top: 2px solid var(--sor-accent); }
+second-order-resonance .sor-legend .sor-dashed { border-color: var(--sor-muted); border-top-style: dashed; }
+second-order-resonance .sor-legend .sor-dot { width: 8px; height: 8px; border: 0; border-radius: 50%; background: var(--sor-probe); }
+second-order-resonance .sor-legend .sor-diamond { width: 8px; height: 8px; border: 1.5px solid var(--sor-accent); transform: rotate(45deg); }
+second-order-resonance .sor-plot { width: 100%; min-width: 0; }
+second-order-resonance .sor-chart { display: block; width: 100%; height: 290px; font-family: inherit; overflow: visible; }
+second-order-resonance .sor-wave { height: 230px; }
+second-order-resonance .sor-chart text { fill: var(--sor-muted); font-size: 12px; }
+second-order-resonance .sor-grid { stroke: var(--sor-grid); stroke-width: 1; }
+second-order-resonance .sor-axis { stroke: var(--sor-muted); stroke-width: 1; }
+second-order-resonance .sor-response { fill: none; stroke: var(--sor-accent); stroke-width: 2.5; stroke-linejoin: round; }
+second-order-resonance .sor-reference { fill: none; stroke: var(--sor-muted); stroke-width: 1.5; stroke-dasharray: 5 4; }
+second-order-resonance .sor-probe-line { stroke: var(--sor-probe); stroke-width: 1; stroke-dasharray: 2 4; }
+second-order-resonance .sor-probe { fill: var(--sor-probe); stroke: var(--card-bg, #fff); stroke-width: 1.5; }
+second-order-resonance .sor-peak { fill: var(--card-bg, #fff); stroke: var(--sor-accent); stroke-width: 2; }
+second-order-resonance .sor-note { margin: 14px 0 !important; padding: 12px 14px; background: var(--sor-panel); border-radius: 8px; font-size: .86em; }
+second-order-resonance .sor-caption { color: var(--sor-muted); font-size: .77em; }
+second-order-resonance .sor-wave-panel { margin-top: 16px; border-top: 1px solid var(--sor-border); padding-top: 12px; }
+second-order-resonance summary { font-weight: 600; cursor: pointer; }
+@media (max-width: 600px) {
+  second-order-resonance { padding: 16px 12px; border-radius: 12px; }
+  second-order-resonance .sor-controls { grid-template-columns: 1fr; gap: 10px; }
+  second-order-resonance .sor-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+  second-order-resonance .sor-control { padding: 10px 12px; }
+  second-order-resonance .sor-actions { gap: 6px; }
+}

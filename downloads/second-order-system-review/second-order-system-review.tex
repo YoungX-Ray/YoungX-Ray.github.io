@@ -1,0 +1,535 @@
+% 编译方式：XeLaTeX，建议连续编译两遍。
+% 本文件使用 Windows 自带的宋体、黑体等中文字体，并将所用字形嵌入 PDF。
+\documentclass[UTF8,a4paper,11pt,fontset=windows]{ctexart}
+\usepackage[margin=21mm,headheight=15pt,headsep=7mm,footskip=10mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,array,enumitem}
+\usepackage{xcolor,tikz,tcolorbox,fancyhdr,hyperref}
+\usetikzlibrary{arrows.meta,decorations.pathmorphing,patterns}
+\definecolor{ink}{HTML}{263747}
+\definecolor{accent}{HTML}{246579}
+\definecolor{soft}{HTML}{F0F5F7}
+\definecolor{muted}{HTML}{5C6872}
+\hypersetup{colorlinks=true,linkcolor=accent,urlcolor=accent,
+  pdftitle={二阶系统基础复习},pdfauthor={},pdfsubject={小车建模、自然频率、阻尼比、标准二阶模型与谐振}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}基础知识储备\enspace /\enspace 自动控制}
+\fancyhead[R]{\small\color{muted}二阶系统}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\renewcommand{\footrulewidth}{0pt}
+\ctexset{section={format=\Large\bfseries\color{ink},beforeskip=13pt,afterskip=8pt},
+  subsection={format=\normalsize\bfseries\color{ink},beforeskip=9pt,afterskip=5pt}}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{4pt}
+\linespread{1.18}
+\setlist[itemize]{leftmargin=1.8em,topsep=3pt,itemsep=2pt,parsep=0pt}
+\setlist[enumerate]{leftmargin=1.8em,topsep=3pt,itemsep=3pt,parsep=0pt}
+\renewcommand{\arraystretch}{1.3}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newtcolorbox{keybox}{colback=soft,colframe=accent!30,boxrule=0.4pt,arc=1.2mm,
+  left=3mm,right=3mm,top=2mm,bottom=2mm,before skip=7pt,after skip=7pt}
+\newcommand{\unit}[1]{\,\mathrm{#1}}
+\newcommand{\dd}{\mathrm{d}}
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries\color{ink}二阶系统基础复习}\\[5pt]
+{\small\color{muted}从小车受力到标准模型\quad |\quad 建模、阻尼性质与谐振}
+\end{center}
+\vspace{-3pt}
+
+\section{为什么小车模型是二阶系统？}
+
+考虑一辆沿水平方向运动的小车，质量为 $m$，通过弹簧和黏性阻尼器连接到固定墙面。以无外力时的平衡位置为原点，位移为 $x(t)$，向右为正，外力为 $F(t)$。
+
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,line width=0.8pt,font=\small]
+  \fill[pattern=north east lines,pattern color=muted!60] (-0.2,-0.15) rectangle (0,2.2);
+  \draw (0,-0.15)--(0,2.2);
+  \draw[decorate,decoration={coil,aspect=0.45,segment length=5pt,amplitude=4pt}]
+    (0,1.5)--(3.2,1.5);
+  \node[above,fill=white,inner sep=2pt] at (1.6,1.7) {弹簧 $k$};
+  \draw (0,0.65)--(1.3,0.65);
+  \draw (1.3,0.4)--(1.3,0.9)--(2.05,0.9);
+  \draw (1.3,0.4)--(2.05,0.4);
+  \draw (1.75,0.45)--(1.75,0.85);
+  \draw (1.75,0.65)--(3.2,0.65);
+  \node[below] at (1.65,0.35) {阻尼器 $c$};
+  \filldraw[fill=soft] (3.2,0.35) rectangle (5.35,1.95);
+  \node at (4.27,1.2) {小车 $m$};
+  \draw (3.65,0.16) circle (0.18);
+  \draw (4.9,0.16) circle (0.18);
+  \draw[muted] (2.9,-0.03)--(7.6,-0.03);
+  \draw[->,accent,thick] (5.35,1.2)--(7.3,1.2) node[right,text=ink] {$F(t)$};
+  \draw[->] (4.25,2.35)--(6.1,2.35) node[right] {$x$ 正方向};
+  \node[below,text=muted] at (4.7,-0.32) {水平方向运动；重力与支持力相互平衡};
+\end{tikzpicture}
+\end{center}
+\vspace{-8pt}
+
+\subsection{从牛顿第二定律建立方程}
+
+采用线性弹簧 $F_k=-kx$ 和线性黏性阻尼 $F_c=-c\dot x$，忽略额外摩擦。牛顿第二定律 $\sum F=m\ddot x$ 给出
+\begin{equation}
+  F(t)-c\dot x(t)-kx(t)=m\ddot x(t).
+\end{equation}
+整理得到小车的运动微分方程：
+\begin{equation}\label{eq:physical}
+  \boxed{m\ddot x(t)+c\dot x(t)+kx(t)=F(t).}
+\end{equation}
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}lYl@{}}
+\toprule
+符号 & 物理含义 & 单位 \\
+\midrule
+$m$ & 质量，表征惯性 & $\mathrm{kg}$ \\
+$c$ & 黏性阻尼系数，阻尼力与速度成正比 & $\mathrm{N\,s/m}$ \\
+$k$ & 弹簧刚度，恢复力与位移成正比 & $\mathrm{N/m}$ \\
+$x,\ \dot x,\ \ddot x$ & 位移、速度、加速度 & $\mathrm{m},\ \mathrm{m/s},\ \mathrm{m/s^2}$ \\
+$F(t)$ & 施加在小车上的外力 & $\mathrm{N}$ \\
+\bottomrule
+\end{tabularx}
+
+\subsection{“二阶”指什么？}
+方程中最高阶导数是位移的\textbf{二阶导数} $\ddot x$，因此这是二阶系统。给定外力后，确定完整运动过程还需要两个初始条件：$x(0)$ 和 $\dot x(0)$。仅知道小车在哪里，不足以确定之后怎样运动，还必须知道它此刻的速度。
+
+\begin{keybox}
+\textbf{物理直觉：}弹簧把小车拉回平衡位置；惯性使它可能冲过平衡位置；正阻尼消耗机械能，使自由振动逐渐衰减。二阶不表示有两个输入或两个输出。
+\end{keybox}
+
+\newpage
+\section{自然频率：先看没有阻尼时怎样运动}
+
+\subsection{自然频率\texorpdfstring{ $\omega_n$}{ ωn}：无阻尼时的固有振动节奏}
+这里的自然频率 $\omega_n$，准确地说是\textbf{无阻尼自然角频率}：系统没有外部激励、没有阻尼时，由自身参数决定的自由振动角频率。
+
+以小车为例，运动方程为 $m\ddot x+c\dot x+kx=F(t)$。为了考察系统自身的振动，令外力 $F(t)=0$，并暂时忽略阻尼 $c=0$，得到
+\[
+  m\ddot x+kx=0
+  \quad\Rightarrow\quad
+  \ddot x+\frac{k}{m}x=0.
+\]
+假设把小车拉到 $x_0$ 后从静止释放，即 $x(0)=x_0$、$\dot x(0)=0$，它的运动是
+\[
+  x(t)=x_0\cos\left(\sqrt{\frac{k}{m}}\,t\right).
+\]
+与正弦振动的形式 $x(t)=x_0\cos(\omega t)$ 对比，便得到
+\begin{equation}
+  \boxed{\omega_n=\sqrt{\frac{k}{m}}.}
+\end{equation}
+因此，这个定义有明确的物理含义：
+\begin{itemize}
+  \item \textbf{刚度 $k$ 越大}，恢复力越强，来回振动越快。
+  \item \textbf{质量 $m$ 越大}，惯性越大，来回振动越慢。
+  \item 在线性模型中，拉开的距离改变振幅，\textbf{不改变自然频率}。
+\end{itemize}
+
+注意单位：$\omega_n$ 的单位是 $\mathrm{rad/s}$。如果问“每秒振动多少次”，应使用单位为赫兹（$\mathrm{Hz}$）的自然频率 $f_n$；自然周期记为 $T_n$：
+\[
+  \boxed{f_n=\frac{\omega_n}{2\pi}},
+  \qquad
+  \boxed{T_n=\frac{2\pi}{\omega_n}}.
+\]
+例如，$m=1\unit{kg}$、$k=4\unit{N/m}$ 时，$\omega_n=2\unit{rad/s}$，即约 $0.318\unit{Hz}$，一个周期约为 $3.14\unit{s}$。
+
+\subsection{有阻尼时，如何理解这个参数？}
+\textbf{实际存在阻尼时，$\omega_n$ 仍然是系统的参数，但不一定等于实际振荡频率。}即使阻尼足够大、自由响应不再周期性振荡，$\omega_n$ 仍由质量与刚度按上述公式定义。
+
+要进一步回答“加入阻尼后是否还会振荡、振荡多久消失”，就需要研究含阻尼的自由运动方程。由此可以确定振荡的分界，并引出临界阻尼系数和阻尼比。
+
+\begin{keybox}
+\textbf{本节结论：}质量与刚度给出固有的时间尺度 $\omega_n=\sqrt{k/m}$。接下来要确定阻尼相对于这个系统究竟有多强，才能判断完整的响应形态。
+\end{keybox}
+
+\newpage
+\section{从振荡分界引出临界阻尼与阻尼比}
+
+\subsection{特征根决定自由响应的形式}
+恢复阻尼、仍令外力为零，小车满足 $m\ddot x+c\dot x+kx=0$。令 $x=e^{st}$ 代入，可得特征方程及其根（概念与推导见\hyperref[app:characteristic]{附录 A}）：
+\begin{equation}\label{eq:characteristic}
+  ms^2+cs+k=0,
+  \qquad
+  s_{1,2}=\frac{-c\pm\sqrt{c^2-4mk}}{2m}.
+\end{equation}
+这里的 $s$ 是指数响应中的参数。\textbf{实部为负，对应衰减；实部为正，对应增长；非零虚部对应振荡项。}例如，共轭复根 $s=\alpha\pm\mathrm{j}\beta$ 对应的实数响应为
+\[
+  x_h(t)=e^{\alpha t}\left[C_1\cos(\beta t)+C_2\sin(\beta t)\right],
+\]
+其中 $\mathrm{j}^2=-1$，$C_1,C_2$ 由初始条件决定。因此判断是否振荡，关键是判别式 $\Delta=c^2-4mk$。
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}p{32mm}YY@{}}
+\toprule
+条件（$c>0$） & 特征根 & 自由响应 \\
+\midrule
+$\Delta<0$ & 实部为负的一对共轭复根 & 有衰减振荡 \\
+$\Delta=0$ & 两个相同的负实根 & 恰好到达非振荡边界 \\
+$\Delta>0$ & 两个不同的负实根 & 无周期性振荡 \\
+\bottomrule
+\end{tabularx}
+
+\subsection{临界阻尼系数来自判别式为零}
+\textbf{临界阻尼系数 $c_{\mathrm{cr}}$，是在质量和刚度固定时，使自由响应不再具有振荡项的最小正阻尼系数。}在这一分界处，判别式恰好为零：
+\[
+  c_{\mathrm{cr}}^2-4mk=0.
+\]
+取正值，得到
+\begin{equation}\label{eq:critical}
+  \boxed{c_{\mathrm{cr}}=2\sqrt{mk}=2m\omega_n.}
+\end{equation}
+它的单位与实际阻尼系数 $c$ 相同，都是 $\mathrm{N\,s/m}$。这个分界同时取决于质量与刚度，因此仅比较 $c$ 的大小，不能判断不同系统属于哪种阻尼状态。
+
+\subsection{阻尼比：实际阻尼是临界阻尼的多少倍}
+用临界阻尼作为比较基准，定义无量纲参数
+\begin{equation}\label{eq:zeta}
+  \boxed{\zeta=\frac{c}{c_{\mathrm{cr}}}=\frac{c}{2\sqrt{mk}}=\frac{c}{2m\omega_n}.}
+\end{equation}
+于是 $0<\zeta<1$ 为欠阻尼，$\zeta=1$ 为临界阻尼，$\zeta>1$ 为过阻尼。将参数定义反过来写，可以得到后面整理标准模型所需的两个关系：
+\begin{equation}\label{eq:coefficients}
+  \boxed{\frac{k}{m}=\omega_n^2},
+  \qquad
+  \boxed{\frac{c}{m}=2\zeta\omega_n}.
+\end{equation}
+
+\newpage
+\section{不同阻尼比下的系统性质}
+
+\subsection{把特征根写成自然频率和阻尼比的形式}
+把式\eqref{eq:coefficients}代入特征方程，得到
+\[
+  s^2+2\zeta\omega_n s+\omega_n^2=0,
+  \qquad
+  s_{1,2}=-\zeta\omega_n\pm\omega_n\sqrt{\zeta^2-1}.
+\]
+下表的\textbf{自由响应}指撤去外力后的运动；\textbf{阶跃响应}指小车从静止开始，外力从 $0$ 突然变为正常数 $F_0$ 后的运动，目标平衡位置为 $F_0/k$。超调表示位移超过这一位置。
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}p{24mm}p{17mm}YY@{}}
+\toprule
+阻尼比 & 名称 & 特征根与自由响应 & 阶跃响应性质 \\
+\midrule
+$\zeta=0$ & 无阻尼 & 纯虚根；持续等幅振荡 & 持续振荡，不能稳定到目标 \\
+\addlinespace[3pt]
+$0<\zeta<1$ & 欠阻尼 & 负实部共轭复根；振荡衰减 & 有超调，经过衰减振荡趋于目标 \\
+\addlinespace[3pt]
+$\zeta=1$ & 临界阻尼 & 重复负实根；无周期性振荡 & 不超调；固定 $\omega_n$ 时，在 $\zeta\geq1$ 的这类模型中趋近目标最快 \\
+\addlinespace[3pt]
+$\zeta>1$ & 过阻尼 & 两个不同的负实根；两个衰减指数项 & 不超调；固定 $\omega_n$ 时，增大阻尼使响应更迟缓 \\
+\addlinespace[3pt]
+$\zeta<0$ & 负阻尼 & 根的实部为正；一般扰动增长 & 不稳定，不能收敛到目标 \\
+\bottomrule
+\end{tabularx}
+
+\subsection{振荡频率与衰减速度分别由什么决定？}
+欠阻尼时，自由响应为
+\begin{equation}\label{eq:underdamped}
+  x_h(t)=e^{-\zeta\omega_n t}\left[C_1\cos(\omega_dt)+C_2\sin(\omega_dt)\right],
+  \qquad \omega_d=\omega_n\sqrt{1-\zeta^2}.
+\end{equation}
+$\omega_d$ 是实际的\textbf{阻尼振荡角频率}，决定振荡节奏；指数包络 $e^{-\zeta\omega_n t}$ 决定振幅衰减速度，包络时间常数为 $1/(\zeta\omega_n)$。
+
+达到临界阻尼时，响应变成
+\begin{equation}\label{eq:critical-response}
+  x_h(t)=(C_1+C_2t)e^{-\omega_n t}.
+\end{equation}
+此时已没有正弦、余弦项，但仍需要时间才能回到平衡位置。过阻尼时则是两个衰减指数项的叠加：$x_h(t)=C_1e^{s_1t}+C_2e^{s_2t}$。
+
+\subsection{将分界、分类与物理参数联系起来}
+取 $m=1\unit{kg}$、$k=4\unit{N/m}$，则 $\omega_n=2\unit{rad/s}$、$c_{\mathrm{cr}}=4\unit{N\,s/m}$。当 $c$ 分别为 $2$、$4$、$8\unit{N\,s/m}$ 时，$\zeta$ 分别为 $0.5$、$1$、$2$，对应欠阻尼、临界阻尼和过阻尼。
+
+\begin{keybox}
+\textbf{适用边界：}$\zeta>0$ 时均渐近稳定；$\zeta=0$ 时振动不衰减，谐振输入还可使输出无界。普通被动阻尼器满足 $c\geq0$，负阻尼表示等效能量注入。“不振荡”指自由响应；持续正弦外力仍可产生受迫振动。
+\end{keybox}
+
+\newpage
+\section{从参数含义自然得到标准二阶模型}
+
+\subsection{先用动态参数重新表达物理方程}
+经过前面的推导，$\omega_n$ 表示固有时间尺度，$\zeta$ 表示相对于临界值的阻尼强弱。现在恢复外力，将式\eqref{eq:physical}除以 $m$：
+\[
+  \ddot x+\frac{c}{m}\dot x+\frac{k}{m}x=\frac{F(t)}{m}.
+\]
+代入已经建立的关系 $c/m=2\zeta\omega_n$、$k/m=\omega_n^2$，得到
+\begin{equation}\label{eq:force}
+  \boxed{\ddot x+2\zeta\omega_n\dot x+\omega_n^2x=\frac{F(t)}{m}.}
+\end{equation}
+这一步仅仅更换了描述参数，系统与输入仍是原来的小车和外力。标准形式左侧的每个系数，都有前面推导出的物理含义。
+
+\subsection{再统一输入尺度，让稳态输出等于输入}
+对 $c>0$ 的稳定小车，恒定外力对应的最终平衡位置为 $x_\infty=F/k$。为了直接用这个平衡位置作为输入，定义
+\[
+  u(t)=\frac{F(t)}{k},\qquad
+  \frac{F(t)}{m}=\frac{k}{m}\frac{F(t)}{k}=\omega_n^2u(t).
+\]
+将输出位移记为 $y=x$，得到\textbf{稳态增益为 $1$ 的标准二阶模型}：
+\begin{equation}\label{eq:standard}
+  \boxed{\ddot y+2\zeta\omega_n\dot y+\omega_n^2y=\omega_n^2u.}
+\end{equation}
+这里的 $u$ 是位移量，表示当前外力所对应的平衡位置；它不表示小车的实际位移。对恒定输入，稳态时导数为零，从而 $y_\infty=u$。右端的 $\omega_n^2$ 来自输入尺度的选择，\textbf{不规定输入必须以频率 $\omega_n$ 变化}。
+
+\subsection{保留稳态增益，得到一般的标准形式}
+如果希望保留实际输入输出之间的比例，记稳态增益为 $K$，即恒定输入下 $y_\infty=Ku$，则标准模型写成
+\begin{equation}\label{eq:general}
+  \boxed{\ddot y+2\zeta\omega_n\dot y+\omega_n^2y=K\omega_n^2u.}
+\end{equation}
+\noindent
+\begin{tabularx}{\linewidth}{@{}YYl@{}}
+\toprule
+对同一辆小车的输入选择 & 输出与稳态关系 & 稳态增益 \\
+\midrule
+$u=F$，直接输入外力 & $y=x$，$x_\infty=F/k$ & $K=1/k$ \\
+$u=F/k$，输入平衡位置 & $y=x$，$x_\infty=u$ & $K=1$ \\
+\bottomrule
+\end{tabularx}
+\par
+大写 $K$ 是稳态增益，小写 $k$ 是弹簧刚度。$K$ 的单位取决于输入输出的选择；外力到位移的增益单位为 $\mathrm{m/N}$。在\textbf{零初始条件}下对式\eqref{eq:general}作拉普拉斯变换，可写成等价的传递函数：
+\begin{equation}\label{eq:transfer}
+  \boxed{G(s)=\frac{Y(s)}{U(s)}=\frac{K\omega_n^2}{s^2+2\zeta\omega_ns+\omega_n^2}.}
+\end{equation}
+
+\begin{keybox}
+\textbf{代入检查：}$m=1$、$c=2$、$k=4$（均取上述 SI 单位）时，$\omega_n=2$、$\zeta=0.5$。原方程为 $\ddot x+2\dot x+4x=F$；令 $u=F/4$ 后，标准方程为 $\ddot y+2\dot y+4y=4u$。
+\end{keybox}
+
+\newpage
+\section{谐振与频率响应}
+
+\subsection{从自由运动转向持续的正弦输入}
+前面通过特征根研究了撤去外力后的自由响应。现在改变问题：\textbf{持续施加正弦输入时，哪个输入频率最容易使系统产生大幅响应？}本章采用式\eqref{eq:standard}的单位稳态增益模型，即 $K=1$：
+\[
+  \ddot y+2\zeta\omega_n\dot y+\omega_n^2y=\omega_n^2u,
+  \qquad u(t)=A\sin(\omega t),\quad A>0.
+\]
+这里 $A$ 是输入幅值，$\omega$ 是可调的\textbf{外部输入角频率}，与系统参数 $\omega_n$ 不同。若 $\zeta>0$，过渡过程会逐渐衰减，最后留下正弦稳态响应：
+\begin{equation}\label{eq:sine-steady}
+  y_{\mathrm{ss}}(t)=B(\omega)\sin\!\left[\omega t+\varphi(\omega)\right].
+\end{equation}
+\textbf{稳态输出与输入同频}，改变的是幅值 $B$ 和相位 $\varphi$。比较不同频率下的响应时，应保持输入幅值 $A$ 不变，并比较过渡过程消失后的输出幅值。
+
+\subsection{幅频响应：每个输入频率被放大多少倍？}
+在传递函数中令 $s=\mathrm{j}\omega$，并取 $K=1$，得到频率响应
+\[
+  G(\mathrm{j}\omega)
+  =\frac{\omega_n^2}{\omega_n^2-\omega^2+\mathrm{j}\,2\zeta\omega_n\omega}.
+\]
+复数的模给出幅值增益，辐角给出相位变化。因此
+\begin{equation}\label{eq:magnitude}
+  \boxed{M(\omega)=\frac{B(\omega)}{A}=|G(\mathrm{j}\omega)|
+  =\frac{1}{\sqrt{\left[1-(\omega/\omega_n)^2\right]^2
+  +\left(2\zeta\omega/\omega_n\right)^2}}.}
+\end{equation}
+幅频曲线以\textbf{输入角频率 $\omega$ 为横坐标、幅值增益 $M$ 为纵坐标}。低频极限 $M(0)=1$ 对应静态增益；高频时位移响应受到惯性限制，幅值增益趋于零。阻尼较小时，中间某个频率附近会出现明显的放大。
+
+\subsection{谐振频率：使稳态振幅最大的输入频率}
+\textbf{保持 $A$ 不变，使稳态输出幅值 $B$ 最大的非零输入角频率，称为谐振角频率 $\omega_r$。}因为 $B=AM$，这等价于寻找 $M(\omega)$ 的最大值。
+
+令 $r=\omega/\omega_n$。式\eqref{eq:magnitude}的分子恒定，只需使分母根号内的量最小：
+\[
+  D(r)=(1-r^2)^2+4\zeta^2r^2,
+  \qquad
+  \frac{\dd D}{\dd r}=4r(r^2+2\zeta^2-1).
+\]
+令导数为零，取 $r>0$，得到 $r^2=1-2\zeta^2$。只有 $1-2\zeta^2>0$ 时才有非零实数解；结合正阻尼条件，得到
+\begin{equation}\label{eq:resonance-frequency}
+  \boxed{\omega_r=\omega_n\sqrt{1-2\zeta^2}},
+  \qquad
+  \boxed{0<\zeta<\frac{1}{\sqrt2}}.
+\end{equation}
+在这个范围内，$D(r)$ 先减小后增大，因此该点确实对应幅值增益的最大值。
+
+\newpage
+\subsection{谐振峰：区分峰的位置、峰的高度与出现条件}
+\textbf{谐振峰是幅频曲线上在非零频率处出现的峰顶。}峰顶的横坐标是谐振频率 $\omega_r$，纵坐标是谐振峰值 $M_r$。将式\eqref{eq:resonance-frequency}代入式\eqref{eq:magnitude}，分母根号内的量化为 $4\zeta^2(1-\zeta^2)$，因此
+\begin{equation}\label{eq:resonance-peak}
+  \boxed{M_r=M(\omega_r)=\frac{1}{2\zeta\sqrt{1-\zeta^2}}},
+  \qquad 0<\zeta<\frac{1}{\sqrt2}.
+\end{equation}
+谐振峰值表示输出相对输入的最大幅值比，对应的稳态输出幅值为 $B_r=AM_r$。\textbf{谐振峰不是时间响应曲线中某一时刻的波峰}，也不是阶跃响应的超调量。
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}p{37mm}Y@{}}
+\toprule
+阻尼比 & 谐振情况 \\
+\midrule
+$\zeta=0$ & 理想无阻尼系统在 $\omega=\omega_n$ 的正弦激励下，振幅不断增长，没有有限振幅的稳态响应。 \\
+\addlinespace[3pt]
+$0<\zeta<1/\sqrt2$ & 存在有限的非零频率谐振峰；阻尼越小，峰值越高。 \\
+\addlinespace[3pt]
+$\zeta\geq1/\sqrt2$ & 幅值增益随频率增大而下降，没有非零频率处的谐振峰；最大增益对应零频极限。 \\
+\bottomrule
+\end{tabularx}
+\par
+因此，\textbf{欠阻尼不一定有谐振峰}：欠阻尼的范围是 $0<\zeta<1$，而有限谐振峰的条件更严格，为 $0<\zeta<1/\sqrt2\approx0.707$。
+
+\subsection{自然频率、阻尼振荡频率与谐振频率}
+\noindent
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{34mm}Y>{\raggedright\arraybackslash}p{43mm}@{}}
+\toprule
+频率名称 & 回答的问题 & 公式与条件 \\
+\midrule
+无阻尼自然角频率 $\omega_n$ & 没有阻尼、没有外力时，系统自身振动多快？ & $\sqrt{k/m}$\newline $m,k>0$ \\
+\addlinespace[3pt]
+阻尼振荡角频率 $\omega_d$ & 欠阻尼自由响应中，衰减振荡的节奏是什么？ & $\omega_n\sqrt{1-\zeta^2}$\newline $0<\zeta<1$ \\
+\addlinespace[3pt]
+谐振角频率 $\omega_r$ & 持续正弦输入中，哪个输入频率使稳态振幅最大？ & $\omega_n\sqrt{1-2\zeta^2}$\newline $0<\zeta<1/\sqrt2$ \\
+\bottomrule
+\end{tabularx}
+\par
+三者的单位均为 $\mathrm{rad/s}$，换成赫兹需除以 $2\pi$。存在有限谐振峰时，$\omega_r<\omega_d<\omega_n$；阻尼很小时，它们才彼此接近。
+
+\subsection{数值例子与适用范围}
+取 $\omega_n=2\unit{rad/s}$、$\zeta=0.2$，则 $\omega_d\approx1.96\unit{rad/s}$、$\omega_r\approx1.92\unit{rad/s}$、$M_r\approx2.55$。输入频率为 $\omega_r$ 时，$A=1$ 对应 $B\approx2.55$；若 $A=2$，则 $B\approx5.10$。若改为 $\zeta=0.8$，自由响应仍有衰减振荡，但幅频曲线已无谐振峰。
+
+\begin{keybox}
+\textbf{适用范围：}本章公式针对无零点标准二阶模型。若稳态增益为正常数 $K$，则幅值增益和峰值乘以 $K$，谐振频率及其出现条件不变。自由振荡由特征根判断；谐振峰则需考察指定输入到输出的幅频响应。
+\end{keybox}
+
+\newpage
+\ctexset{appendix/name={附录~,}}
+\appendix
+\section{特征方程与特征根}\label{app:characteristic}
+
+本附录解释正文中的一步：为什么把 $x=e^{st}$ 代入微分方程，就能判断系统是否振荡、是否稳定？以下讨论实系数、线性、常系数的二阶系统。
+
+\subsection{先分清三个对象}
+以无外力时的小车为例：
+\[
+  \underbrace{m\ddot x+c\dot x+kx=0}_{\text{微分方程：未知量是函数 }x(t)}
+  \quad\longrightarrow\quad
+  \underbrace{p(s)=ms^2+cs+k}_{\text{特征多项式：关于 }s\text{ 的多项式}}.
+\]
+令 $p(s)=0$，得到\textbf{特征方程}；满足这个代数方程的数 $s_1,s_2$，称为\textbf{特征根}。根可以是实数，也可以是复数。二阶方程按重数计有两个根；“两个相同的根”称为二重根。
+
+\subsection{为什么试取指数形式？}
+指数函数的导数仍与自身成比例。取一个非零试探解 $x_h(t)=Ce^{st}$，其中 $C\ne0$、$s$ 待定，则
+\[
+  \dot x_h=sCe^{st},\qquad \ddot x_h=s^2Ce^{st}.
+\]
+代入齐次方程，得到
+\[
+  (ms^2+cs+k)Ce^{st}=0.
+\]
+由于 $Ce^{st}\ne0$，可以约去它，留下 $ms^2+cs+k=0$。因此，\textbf{特征根给出系统允许的指数变化模式}。它不是位移，而是指数中的变化率参数；若 $t$ 用秒计，$s$ 的单位为 $\mathrm{s^{-1}}$。
+
+有输入时，先把输入项置零，得到右端为零的\textbf{齐次方程}，用它研究自由响应。对一般常系数方程
+\[
+  a_2\ddot y+a_1\dot y+a_0y=f(t),\quad a_2\ne0,
+\]
+其特征方程为 $a_2s^2+a_1s+a_0=0$。输入决定受迫响应，初始条件决定各自由响应模式的系数；它们不改变给定微分方程的特征根。
+
+\subsection{如何求根，并写出自由响应？}
+令 $\Delta=a_1^2-4a_2a_0$，由二次方程求根公式得到
+\[
+  \boxed{s_{1,2}=\frac{-a_1\pm\sqrt{\Delta}}{2a_2}.}
+\]
+\noindent
+\begin{tabularx}{\linewidth}{@{}p{21mm}p{40mm}Y@{}}
+\toprule
+判别式 & 特征根 & 齐次通解 $y_h(t)$ \\
+\midrule
+$\Delta>0$ & 两个不同实根 $s_1,s_2$ & $C_1e^{s_1t}+C_2e^{s_2t}$ \\
+$\Delta=0$ & 二重实根 $s_0$ & $(C_1+C_2t)e^{s_0t}$ \\
+$\Delta<0$ & $\alpha\pm\mathrm{j}\beta$，$\beta>0$ & $e^{\alpha t}[C_1\cos(\beta t)+C_2\sin(\beta t)]$ \\
+\bottomrule
+\end{tabularx}
+\par
+这里 $\mathrm{j}^2=-1$，$C_1,C_2$ 由两个初始条件确定。重根时，两个相同的 $e^{s_0t}$ 不能提供两个独立解，因此第二个解要取 $te^{s_0t}$。
+
+\newpage
+\subsection{实部管增长或衰减，虚部管振荡}
+把一个根写成 $s=\alpha+\mathrm{j}\beta$，利用欧拉公式：
+\[
+  e^{st}=e^{\alpha t}e^{\mathrm{j}\beta t}
+  =e^{\alpha t}[\cos(\beta t)+\mathrm{j}\sin(\beta t)].
+\]
+这说明复数根并不要求物理位移是复数。实系数方程的非实根成共轭对出现，组合后就得到 A.3 节的实值正弦、余弦响应。
+\begin{itemize}
+  \item $\alpha<0$：该模式的包络衰减；$\alpha>0$：包络增长。
+  \item $\beta\ne0$：存在振荡项，角频率为 $|\beta|$，周期为 $2\pi/|\beta|$。
+  \item $\beta=0$：该指数模式没有周期性振荡；是否衰减仍由实部决定。
+\end{itemize}
+例如，$s=-2\pm3\mathrm{j}$ 对应
+\[
+  y_h(t)=e^{-2t}[C_1\cos(3t)+C_2\sin(3t)].
+\]
+其包络时间常数为 $1/2\unit{s}$，振荡角频率为 $3\unit{rad/s}$，周期为 $2\pi/3\approx2.09\unit{s}$。
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}p{57mm}Y@{}}
+\toprule
+特征根在复平面中的位置 & 自由响应与稳定性 \\
+\midrule
+所有根的实部都小于零 & 任意初始扰动都衰减到零，称为渐近稳定；负实部重根也满足这一点。 \\
+\addlinespace[3pt]
+至少一个根的实部大于零 & 存在增长模式，系统不稳定。 \\
+\addlinespace[3pt]
+无右半平面根，但有虚轴上的根 & 需要继续检查重数。对本附录的标量二阶方程，虚轴上的单根可产生有界但不衰减的自由响应；虚轴重根可因 $t$ 因子产生无界响应。 \\
+\bottomrule
+\end{tabularx}
+\par
+\textbf{无阻尼的 $s=\pm\mathrm{j}\omega_n$ 是临界稳定的自由运动，不是渐近稳定。}同时，它并不满足“有界输入产生有界输出”：以 $\omega_n$ 持续正弦激励时会共振增长。
+
+\subsection{放回标准二阶模型，读出阻尼性质}
+对 $\omega_n>0$ 的标准二阶模型，齐次方程及特征根为
+\[
+  \ddot y+2\zeta\omega_n\dot y+\omega_n^2y=0,
+  \qquad s_{1,2}=-\zeta\omega_n\pm\omega_n\sqrt{\zeta^2-1}.
+\]
+当 $0<\zeta<1$ 时，应把根号中的负数写成虚数形式：
+\[
+  \boxed{s_{1,2}=-\zeta\omega_n\pm\mathrm{j}\omega_n\sqrt{1-\zeta^2}
+  =-\zeta\omega_n\pm\mathrm{j}\omega_d.}
+\]
+所以实部 $-\zeta\omega_n$ 决定衰减，虚部的绝对值 $\omega_d$ 决定自由振荡频率。$\zeta=1$ 时两根合并为 $-\omega_n$；$\zeta>1$ 时为两个负实根。\textbf{判别式判断根的类型，实部的符号判断稳定性}，两件事应分开检查。
+
+\newpage
+\subsection{完整算例：从方程求到具体运动}
+取 $m=1\unit{kg}$、$c=2\unit{N\,s/m}$、$k=4\unit{N/m}$。无外力时，给定 $x(0)=x_0$、$\dot x(0)=0$：
+\[
+  \ddot x+2\dot x+4x=0
+  \quad\Rightarrow\quad s^2+2s+4=0
+  \quad\Rightarrow\quad s_{1,2}=-1\pm\mathrm{j}\sqrt3.
+\]
+先由根写出自由响应，再用初始条件确定系数：
+\[
+  x(t)=e^{-t}[C_1\cos(\sqrt3\,t)+C_2\sin(\sqrt3\,t)],
+  \qquad C_1=x_0,
+\]
+\[
+  \dot x(0)=-C_1+\sqrt3\,C_2=0
+  \quad\Rightarrow\quad C_2=\frac{x_0}{\sqrt3}.
+\]
+因此，
+\[
+  \boxed{x(t)=x_0e^{-t}\left[\cos(\sqrt3\,t)+\frac{1}{\sqrt3}\sin(\sqrt3\,t)\right].}
+\]
+与正文参数对照：$\omega_n=2\unit{rad/s}$、$\zeta=0.5$、$\omega_d=\sqrt3\unit{rad/s}$。改变 $x_0$ 会改变振幅，但特征根仍为 $-1\pm\mathrm{j}\sqrt3$。
+
+\subsection{它与传递函数极点、矩阵特征值有什么关系？}
+\textbf{从传递函数看：}本讲义的标准模型为
+\[
+  G(s)=\frac{K\omega_n^2}{s^2+2\zeta\omega_ns+\omega_n^2}.
+\]
+当 $K\ne0$ 时，分子是非零常数，没有极零相消，分母的根就是传递函数的\textbf{极点}，也就是上述特征根。对更一般的模型，约分可能隐藏某些内部模式，不能把某个传递函数的极点不加条件地等同于全部内部特征根。
+
+\textbf{从状态方程看：}令 $\boldsymbol z=[x,\dot x]^{\mathsf T}$，则无外力小车可以写成
+\[
+  \dot{\boldsymbol z}=A\boldsymbol z,\qquad
+  A=\begin{bmatrix}0&1\\-k/m&-c/m\end{bmatrix}.
+\]
+矩阵特征值 $\lambda$ 满足
+\[
+  \det(\lambda I-A)=\lambda^2+\frac{c}{m}\lambda+\frac{k}{m}=0.
+\]
+其中 $I$ 为单位矩阵，$\det$ 表示行列式。它与小车的特征方程只差一个非零常数因子 $m$，所以两者的根相同。$s$ 和 $\lambda$ 只是不同写法下采用的符号。
+
+\subsection{回看时记住这条推理链}
+\begin{keybox}
+\textbf{齐次微分方程 $\to$ 试取指数解 $\to$ 特征方程 $\to$ 特征根 $\to$ 自由响应模式。}
+
+特征根决定允许的模式，初始条件决定各模式的系数。非实根不意味着不稳定；负实部的共轭复根对应衰减振荡。根的虚部给出自由振荡频率，\textbf{谐振频率还要从幅频响应求取}，不能直接用虚部代替。
+\end{keybox}
+
+\end{document}

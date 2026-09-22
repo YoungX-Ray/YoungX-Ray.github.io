@@ -1,0 +1,61 @@
+/* Scoped to the article widget; inherits Butterfly's light/dark palette. */
+#step-response-demo { scroll-margin-top: 90px; }
+second-order-step {
+  --sos-accent: #2376d2;
+  --sos-muted: #64748b;
+  --sos-grid: #e5eaf1;
+  --sos-panel: #f5f8fc;
+  --sos-border: #dce4ee;
+  display: block;
+  margin: 24px 0;
+  padding: 24px;
+  border: 1px solid var(--sos-border);
+  border-radius: 16px;
+  background: var(--card-bg, #fff);
+  color: var(--font-color, #344256);
+  line-height: 1.6;
+  color-scheme: light;
+}
+[data-theme='dark'] second-order-step {
+  --sos-accent: #70b8ff;
+  --sos-muted: #a7b5c9;
+  --sos-grid: #303c4d;
+  --sos-panel: #1c2633;
+  --sos-border: #354256;
+  color-scheme: dark;
+}
+second-order-step * { box-sizing: border-box; }
+second-order-step .sos-heading { display: grid; gap: 4px; margin-bottom: 20px; }
+second-order-step .sos-heading strong { font-size: 1.12em; color: inherit; }
+second-order-step .sos-subtitle { color: var(--sos-muted); font-size: .86em; }
+second-order-step .sos-controls { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+second-order-step .sos-control { display: block; min-width: 0; padding: 14px 16px 12px; border-radius: 10px; background: var(--sos-panel); }
+second-order-step .sos-control-title { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 3px 10px; font-size: .92em; }
+second-order-step output { color: var(--sos-accent); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+second-order-step input[type='range'] { display: block; width: 100%; height: 30px; margin: 8px 0 3px; padding: 0; accent-color: var(--sos-accent); cursor: pointer; }
+second-order-step input[type='range']:focus-visible { outline: 2px solid var(--sos-accent); outline-offset: 4px; border-radius: 3px; }
+second-order-step .sos-scale { display: flex; justify-content: space-between; gap: 8px; color: var(--sos-muted); font-size: .76em; }
+second-order-step .sos-metrics { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin: 20px 0 16px; font-size: .9em; }
+second-order-step .sos-state { padding: 4px 10px; border-radius: 6px; color: var(--sos-accent); background: var(--sos-panel); font-weight: 600; }
+second-order-step .sos-overshoot { display: flex; align-items: baseline; gap: 8px; color: var(--sos-muted); }
+second-order-step .sos-overshoot strong { min-width: 4.6ch; color: var(--font-color, #344256); font-size: 1.2em; font-variant-numeric: tabular-nums; text-align: right; }
+second-order-step .sos-legend { display: flex; flex-wrap: wrap; gap: 6px 22px; color: var(--sos-muted); font-size: .82em; }
+second-order-step .sos-legend > span { display: inline-flex; align-items: center; gap: 7px; }
+second-order-step .sos-legend i { display: inline-block; width: 22px; height: 0; border-top: 3px solid var(--sos-accent); }
+second-order-step .sos-legend .sos-line-input { border-top: 2px dashed var(--sos-muted); }
+second-order-step .sos-plot { min-width: 0; width: 100%; margin-top: 10px; }
+second-order-step .sos-chart { display: block; width: 100%; height: 290px; overflow: visible; font-family: inherit; }
+second-order-step .sos-chart text { fill: var(--sos-muted); font-size: 12px; }
+second-order-step .sos-grid-line { stroke: var(--sos-grid); stroke-width: 1; }
+second-order-step .sos-axis { stroke: var(--sos-muted); stroke-width: 1; }
+second-order-step .sos-target { stroke: var(--sos-muted); stroke-width: 1.5; stroke-dasharray: 6 5; }
+second-order-step .sos-response { fill: none; stroke: var(--sos-accent); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+second-order-step .sos-note { margin: 12px 0 6px !important; font-size: .88em; }
+second-order-step .sos-footnote { color: var(--sos-muted); font-size: .78em; }
+@media (max-width: 600px) {
+  second-order-step { padding: 16px 12px; border-radius: 12px; }
+  second-order-step .sos-controls { grid-template-columns: 1fr; gap: 10px; }
+  second-order-step .sos-heading { margin-bottom: 16px; }
+  second-order-step .sos-control { padding: 10px 12px; }
+  second-order-step .sos-metrics { margin-top: 16px; }
+}
