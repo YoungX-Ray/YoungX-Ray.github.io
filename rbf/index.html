@@ -1,16 +1,16 @@
-<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>知识目录 | X-Ray</title><meta name="author" content="Young"><meta name="copyright" content="Young"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="从二阶系统建模、阻尼和谐振，到 PID 极点配置，再到 RBF 神经网络，按主题阅读笔记并进入交互实验。">
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>RBF 径向基函数 | X-Ray</title><meta name="author" content="Young"><meta name="copyright" content="Young"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="从高斯基函数到神经网络，结合可播放、单步和回看的训练动画，理解各个输出权重如何随迭代变化。">
 <meta property="og:type" content="website">
-<meta property="og:title" content="知识目录">
-<meta property="og:url" content="https://youngx-ray.github.io/knowledge/index.html">
+<meta property="og:title" content="RBF 径向基函数">
+<meta property="og:url" content="https://youngx-ray.github.io/rbf/index.html">
 <meta property="og:site_name" content="X-Ray">
-<meta property="og:description" content="从二阶系统建模、阻尼和谐振，到 PID 极点配置，再到 RBF 神经网络，按主题阅读笔记并进入交互实验。">
+<meta property="og:description" content="从高斯基函数到神经网络，结合可播放、单步和回看的训练动画，理解各个输出权重如何随迭代变化。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://youngx-ray.github.io/img/butterfly-icon.png">
-<meta property="article:published_time" content="2026-09-22T09:21:00.000Z">
-<meta property="article:modified_time" content="2026-09-22T12:31:36.454Z">
+<meta property="article:published_time" content="2026-09-22T12:10:00.000Z">
+<meta property="article:modified_time" content="2026-09-22T12:29:18.676Z">
 <meta property="article:author" content="Young">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://youngx-ray.github.io/img/butterfly-icon.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://youngx-ray.github.io/knowledge/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.1.260810"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
+<meta name="twitter:image" content="https://youngx-ray.github.io/img/butterfly-icon.png"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://youngx-ray.github.io/rbf/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.7.1.260810"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.3.1/css/all.min.css"><script>
     (() => {
       
     const saveToLocal = {
@@ -185,69 +185,17 @@
   },
   autoDarkmode: false
 }</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
-  title: '知识目录',
+  title: 'RBF 径向基函数',
   isHighlightShrink: false,
   isToc: false,
   pageType: 'page'
-}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://picgocloud.com/m/7d9ebd28-821e-45b0-82e9-ea249606a784.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-book-open"></i><span> 知识目录</span></a></div><div class="menus_item"><a class="site-page" href="/labs/"><i class="fa-fw fas fa-sliders-h"></i><span> 交互实验</span></a></div><div class="menus_item"><a class="site-page" href="/rbf/"><i class="fa-fw fas fa-project-diagram"></i><span> RBF 学习</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="page type-default" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">X-Ray</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-book-open"></i><span> 知识目录</span></a></div><div class="menus_item"><a class="site-page" href="/labs/"><i class="fa-fw fas fa-sliders-h"></i><span> 交互实验</span></a></div><div class="menus_item"><a class="site-page" href="/rbf/"><i class="fa-fw fas fa-project-diagram"></i><span> RBF 学习</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">知识目录</h1></header><main class="layout" id="content-inner"><div id="page"><div class="page-title">知识目录</div><div class="container" id="article-container">
+}</script><meta name="generator" content="Hexo 7.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(https://picgocloud.com/m/7d9ebd28-821e-45b0-82e9-ea249606a784.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-book-open"></i><span> 知识目录</span></a></div><div class="menus_item"><a class="site-page" href="/labs/"><i class="fa-fw fas fa-sliders-h"></i><span> 交互实验</span></a></div><div class="menus_item"><a class="site-page" href="/rbf/"><i class="fa-fw fas fa-project-diagram"></i><span> RBF 学习</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div></div></div><div class="page type-default" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">X-Ray</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/knowledge/"><i class="fa-fw fas fa-book-open"></i><span> 知识目录</span></a></div><div class="menus_item"><a class="site-page" href="/labs/"><i class="fa-fw fas fa-sliders-h"></i><span> 交互实验</span></a></div><div class="menus_item"><a class="site-page" href="/rbf/"><i class="fa-fw fas fa-project-diagram"></i><span> RBF 学习</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-user"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">RBF 径向基函数</h1></header><main class="layout" id="content-inner"><div id="page"><div class="page-title">RBF 径向基函数</div><div class="container" id="article-container">
 <link rel="stylesheet" href="/css/site-hubs.css">
 <div class="xr-hub">
-  <div class="xr-intro">
-    <p class="xr-kicker">从理解模型，到动手验证</p>
-    <p class="xr-lead">把公式、物理直觉和响应曲线放在一起学习。这里汇集已发布的笔记、讲义与交互实验。</p>
-  </div>
-  <section class="xr-card" aria-labelledby="second-order-topic">
-    <p class="xr-kicker">主题 01 · 自动控制基础</p>
-    <h2 id="second-order-topic">二阶系统基础复习</h2>
-    <p>从质量—弹簧—阻尼小车出发，理解自然频率、临界阻尼、阶跃响应与谐振，再用 PID 改变闭环极点，观察响应如何随之变化。</p>
-    <ol class="xr-route">
-      <li><strong>先建立模型：</strong>阅读第 1–4 章，认识运动方程、自然频率与阻尼比。</li>
-      <li><strong>再观察响应：</strong>阅读第 5–6 章，结合阶跃和谐振实验理解时域、频域表现。</li>
-      <li><strong>最后配置极点：</strong>阅读网页第 7 章，按 P → PD → PI → PID 的顺序比较闭环响应。</li>
-    </ol>
-    <div class="xr-actions">
-      <a class="xr-button" href="/notes/second-order-system-review/">开始阅读完整笔记</a>
-      <a class="xr-button xr-button--secondary" href="/notes/second-order-system-review/#appendix-characteristic">补习特征方程与极点</a>
-      <a class="xr-button xr-button--secondary" href="/notes/second-order-system-review/#appendix-poles-root-locus">附录 B：学看极点图与根轨迹</a>
-    </div>
-  </section>
-  <section class="xr-card" aria-labelledby="rbf-topic">
-    <p class="xr-kicker">主题 02 · 神经网络与函数逼近</p><h2 id="rbf-topic">RBF 径向基函数</h2>
-    <p>从高斯基函数的中心和宽度出发，理解多个神经元怎样通过输出权重组合成一条曲线。结合训练动画，逐次观察权重、输出贡献与误差。</p>
-    <div class="xr-actions"><a class="xr-button" href="/rbf/">进入 RBF 学习栏目</a><a class="xr-button xr-button--secondary" href="/labs/rbf-training/">播放权重训练动画</a></div>
-  </section>
-  <div class="xr-grid xr-grid--two">
-    <section class="xr-card" aria-labelledby="handouts-title">
-      <p class="xr-kicker">离线阅读</p>
-      <h2 id="handouts-title">配套讲义</h2>
-      <p>讲义包含第 1–6 章、附录 A“特征方程”与附录 B“极点图和根轨迹”。第 7 章的 PID 交互实验在网页提供，另附完整推导与练习。</p>
-      <ul class="xr-link-list">
-        <li><a href="/downloads/second-order-system-review/second-order-system-review.pdf">阅读 / 下载二阶系统讲义（PDF）</a></li>
-        <li><a href="/downloads/second-order-system-review/pid-pole-placement.md">下载 PID 极点配置推导与练习（Markdown）</a></li>
-        <li><a href="/downloads/second-order-system-review/second-order-system-review.tex">下载讲义 LaTeX 源文件</a></li>
-      </ul>
-    </section>
-    <section class="xr-card" aria-labelledby="experiments-title">
-      <p class="xr-kicker">边学边调参数</p>
-      <h2 id="experiments-title">交互实验</h2>
-      <ul class="xr-link-list">
-        <li><a href="/notes/second-order-system-review/#step-response-demo">阶跃响应：看阻尼与响应速度</a></li>
-        <li><a href="/notes/second-order-system-review/#resonance-demo">谐振实验：寻找幅频曲线的峰</a></li>
-        <li><a href="/notes/second-order-system-review/#pid-demo">PID 极点配置：联动观察三幅图</a></li>
-        <li><a href="/labs/rbf-training/">RBF：播放神经元权重的学习过程</a></li>
-      </ul>
-      <div class="xr-actions"><a class="xr-button xr-button--secondary" href="/labs/">浏览全部交互实验</a></div>
-    </section>
-  </div>
-  <section class="xr-card" aria-labelledby="browse-title">
-    <h2 id="browse-title">按分类与标签查找</h2>
-    <p>分类：<a href="/categories/基础知识/">基础知识</a> · <a href="/categories/神经网络/">神经网络</a></p>
-    <p>标签：<a href="/tags/自动控制/">自动控制</a> · <a href="/tags/二阶系统/">二阶系统</a> · <a href="/tags/学习笔记/">学习笔记</a> · <a href="/tags/RBF/">RBF</a></p>
-    <div class="xr-actions">
-      <a class="xr-button xr-button--secondary" href="/categories/">全部分类</a>
-      <a class="xr-button xr-button--secondary" href="/tags/">全部标签</a>
-    </div>
-  </section>
+  <div class="xr-intro"><p class="xr-kicker">新主题 · 神经网络与函数逼近</p><p class="xr-lead">一组局部的“小山包”，怎样拼出一条复杂的曲线？从径向基函数开始，看见每个神经元如何通过权重更新参与拟合。</p></div>
+  <section class="xr-card" aria-labelledby="rbf-lesson"><p class="xr-kicker">第一课 · 从直觉到迭代</p><h2 id="rbf-lesson">RBF：看见权重如何学习</h2><p>先读懂中心、宽度与激活，再理解神经元的加权求和。用一维函数拟合，把梯度下降的每一步落实到可读的数字与曲线上。</p><ol class="xr-route"><li><strong>认识一个神经元：</strong>高斯基函数、距离、中心与宽度。</li><li><strong>组合成网络：</strong>区分激活、权重和实际输出贡献。</li><li><strong>看见学习过程：</strong>播放训练、选择神经元、回看任意迭代。</li><li><strong>自己做对比：</strong>改变神经元数、宽度和学习率，解释拟合差异。</li></ol><div class="xr-actions"><a class="xr-button" href="/notes/rbf-neural-network/">开始学习 RBF</a><a class="xr-button xr-button--secondary" href="/labs/rbf-training/">直接播放训练动画</a></div></section>
+  <div class="xr-grid xr-grid--two"><section class="xr-card"><h2>像视频一样看，也可以停下来拆解</h2><p>支持播放、暂停、逐次前进和时间轴回放。权重条、权重轨迹、拟合曲线、误差曲线与网络连接同步变化，选中神经元还能查看下一步更新计算。</p><p>可下载全部迭代的 CSV，保留这次实验的权重与误差记录。</p></section><section class="xr-card"><h2>这节课的边界</h2><p>固定各神经元的中心与宽度，只训练输出权重和偏置；数据无噪声，用来理解学习机制。</p><p>先修要求：函数图像、指数函数与求和。梯度公式逐步解释；你也可以先观察动画，再回头读推导。</p></section></div>
+  <p class="xr-note">控制理论与神经网络是不同的学习主题。你可以在<a href="/knowledge/">知识目录</a>切换，也可以回到<a href="/notes/second-order-system-review/">二阶系统与 PID 笔记</a>。</p>
 </div>
 
 </div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Young</div><div class="author-info-description">记录基础知识与控制理论，用推导、例子和交互实验理解系统。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">2</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">5</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/YoungX-Ray"><i class="fab fa-github"></i><span>访问 GitHub</span></a><div class="card-info-social-icons"><a class="social-icon" href="mailto:1530940996@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a><a class="social-icon" href="https://github.com/YoungX-Ray" target="_blank" title="GitHub"><i class="fab fa-github" style="color: #24292e;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">记录基础知识与控制理论。二阶系统笔记与三项交互实验已更新，欢迎从知识目录开始学习。</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/notes/rbf-neural-network/" title="RBF 径向基函数：看见神经元权重如何学习">RBF 径向基函数：看见神经元权重如何学习</a><time datetime="2026-09-22T12:10:00.000Z" title="发表于 2026-09-22 20:10:00">2026-09-22</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/notes/second-order-system-review/" title="二阶系统基础复习：从小车建模到阻尼与谐振">二阶系统基础复习：从小车建模到阻尼与谐振</a><time datetime="2026-09-22T03:25:29.000Z" title="发表于 2026-09-22 11:25:29">2026-09-22</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline"><i class="fas fa-folder-open"></i><span>分类</span></div>

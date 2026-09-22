@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light dark"><title>看见 RBF 的学习过程 · X-Ray</title><link rel="stylesheet" href="lab.css"><script defer src="engine.js"></script><script defer src="lab.js"></script></head>
+<body>
+<main>
+  <header class="hero">
+    <nav><a href="https://youngx-ray.github.io/rbf/">← RBF 学习栏目</a><button id="theme" type="button">切换深浅主题</button></nav>
+    <p class="eyebrow">RBF / 01 / 训练可视化</p><h1>看见权重如何学会一条曲线</h1>
+    <p class="intro">每个神经元负责一片邻域。训练改变它的输出权重，再把所有贡献相加，逐渐贴近目标。</p>
+    <p class="scope">本实验：1 个输入 · 高斯基函数 · 1 个线性输出。<strong>中心 c 与宽度 σ 固定，只学习输出权重 w 和偏置 b。</strong></p>
+  </header>
+  <section class="panel settings" aria-labelledby="settings-title"><h2 id="settings-title">先选一组实验</h2>
+    <div class="presets"><button data-preset="default" type="button">默认：7 个神经元</button><button data-preset="few" type="button">对比：只有 3 个</button><button data-preset="narrow" type="button">对比：很窄的基函数</button></div>
+    <div class="fields">
+      <label>目标函数<select id="target"><option value="wave">波浪 + 趋势</option><option value="bump">两个局部起伏</option></select></label>
+      <label>神经元数 M<select id="count"><option>3</option><option>5</option><option selected>7</option><option>9</option></select></label>
+      <label>宽度 σ<select id="sigma"><option value="0.18">0.18 · 窄</option><option value="0.35">0.35</option><option value="0.55" selected>0.55 · 默认</option><option value="1.1">1.10 · 宽</option></select></label>
+      <label>学习率 η<select id="rate"><option value="0.02">0.02 · 慢</option><option value="0.08" selected>0.08</option><option value="0.2">0.20 · 快</option></select></label>
+    </div><p class="hint">修改以上参数会从第 0 次重新开始。41 个等距、无噪声训练样本，全部权重与偏置从 0 初始化。</p>
+  </section>
+  <section class="panel transport" aria-labelledby="play-title">
+    <div class="section-head"><h2 id="play-title">播放一次训练</h2><span id="status" role="status">就绪</span></div>
+    <div class="buttons"><button id="play" class="primary" type="button">播放训练</button><button id="step" type="button">前进 1 次</button><button id="reset" type="button">回到起点</button><label>播放速度<select id="speed"><option value="10">10 次 / 秒</option><option value="60" selected>60 次 / 秒</option><option value="180">180 次 / 秒</option></select></label><button id="download" type="button">下载迭代 CSV</button></div>
+    <label class="timeline-label" for="timeline">拖动回看任意一次迭代 <strong id="epoch">0 / 1200</strong></label><input id="timeline" type="range" min="0" max="1200" step="1" value="0">
+    <div class="metrics"><div>训练 MSE<strong id="mse">—</strong></div><div>相对初始误差下降<strong id="improvement">—</strong></div><div>输出偏置 b<strong id="bias">—</strong></div></div>
+    <p class="hint">一次迭代 = 用全部 41 个样本计算梯度，更新全部输出权重与偏置一次。播放速度只影响观看速度。</p>
+  </section>
+  <div class="grid">
+    <section class="panel"><div class="section-head"><h2>① 所有贡献相加，得到拟合</h2><span class="tag">函数空间</span></div><div class="legend"><span class="target-line">虚线：目标函数</span><span class="fit-line">实线：网络输出</span><span>圆点：训练样本</span></div><svg id="fit" role="img" aria-label="目标函数、训练样本与当前 RBF 网络拟合曲线"></svg><p class="hint">淡线是各个 wⱼφⱼ(x) 的贡献；加上偏置 b 后才得到粗实线。</p></section>
+    <section class="panel"><div class="section-head"><h2>② 每个神经元的输出权重</h2><span class="tag">点击选中</span></div><div id="weights" class="weight-list" aria-label="各个神经元的当前输出权重"></div><p class="hint">条形以 0 为中心，左负右正，比例尺在本次训练中固定。颜色与正负号同时标识符号。</p></section>
+    <section class="panel"><h2>③ 权重随迭代的轨迹</h2><svg id="history" role="img" aria-label="各神经元权重与迭代次数的关系，粗线为选中神经元"></svg><p class="hint">粗线对应选中的神经元；细线为其余权重，虚线为偏置。只显示已播放到的历史。</p></section>
+    <section class="panel"><h2>④ 误差如何下降</h2><svg id="loss" role="img" aria-label="训练均方误差随迭代变化的对数坐标曲线"></svg><p class="hint">纵轴为 MSE 的对数刻度，每格代表数量级。这里是训练误差，不代表对新数据的泛化能力。</p></section>
+  </div>
+  <section class="panel inspection" aria-labelledby="neuron-title"><div class="section-head"><h2 id="neuron-title">拆开一个神经元看</h2><label>选中神经元<select id="neuron"></select></label></div>
+    <div class="probe"><label for="probe">探针输入 x = <strong id="probe-value">0.35</strong></label><input id="probe" type="range" min="-2" max="2" step="0.01" value="0.35"><p class="hint">移动探针只改变当前输入和激活值，不训练、不改变权重。</p></div>
+    <div class="grid details"><div><svg id="basis" role="img" aria-label="选中神经元的固定高斯基函数、加权贡献以及探针位置"></svg><p class="hint">虚线 φⱼ(x) 是固定的基函数，实线 wⱼφⱼ(x) 会随训练改变。</p></div><div><svg id="network" role="img" aria-label="输入通过高斯神经元和输出连接权重，汇总为网络预测的结构图"></svg></div></div>
+    <div id="neuron-values" class="readout"></div><div class="update-box"><h3>这一个权重的下一步怎么算？</h3><p id="update"></p><p class="hint">gⱼ = (1/N) Σᵢ (ŷᵢ − yᵢ) φⱼ(xᵢ)，wⱼ的新值 = wⱼ − ηgⱼ。这里的 gⱼ 来自全部样本，不只来自探针。</p></div>
+  </section>
+  <section class="panel guide"><h2>带着三个问题再播放一次</h2><ol><li>先选默认参数，播放到第 100 次：哪些权重为正，哪些为负？它们在曲线的哪里起作用？</li><li>固定神经元数量，把 σ 改为 0.18：为什么神经元中心之间更难拟合？</li><li>回到默认，再只保留 3 个神经元：误差是否还会下降？下降是否等于已经拟合得很好？</li></ol><p>继续阅读：<a href="https://youngx-ray.github.io/notes/rbf-neural-network/">RBF 从基函数到训练迭代的完整笔记 →</a></p></section>
+  <footer>数据与迭代均在你的浏览器中计算 · 无随机抽样 · 可重复回放</footer>
+  <noscript>此动画需要启用 JavaScript。你也可以阅读 <a href="https://youngx-ray.github.io/notes/rbf-neural-network/">RBF 学习笔记</a>。</noscript>
+</main>
+</body></html>
