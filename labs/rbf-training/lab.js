@@ -120,8 +120,12 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden&&running)pause('页面隐藏 · 已暂停');});
   if(embed){
     const origin=location.origin;
-    window.addEventListener('message',event=>{if(event.source!==parent||event.origin!==origin)return;if(event.data?.type==='rbf-theme'){document.documentElement.dataset.theme=event.data.theme==='dark'?'dark':'light';render();}});
-    let sentHeight=0;new ResizeObserver(()=>{const height=Math.ceil(document.body.scrollHeight);if(height!==sentHeight){sentHeight=height;parent.postMessage({type:'rbf-height',height},origin);}}).observe(document.body);
+    let sentHeight=0;
+    const sendHeight=force=>{const height=Math.ceil(document.body.scrollHeight);if(force||height!==sentHeight){sentHeight=height;parent.postMessage({type:'rbf-height',height},origin);}};
+    // A cached iframe may finish before the parent's deferred listener exists.
+    // Every parent handshake therefore receives a fresh height, even unchanged.
+    window.addEventListener('message',event=>{if(event.source!==parent||event.origin!==origin)return;if(event.data?.type==='rbf-theme'){document.documentElement.dataset.theme=event.data.theme==='dark'?'dark':'light';render();requestAnimationFrame(()=>sendHeight(true));}});
+    new ResizeObserver(()=>sendHeight(false)).observe(document.body);
     parent.postMessage({type:'rbf-ready'},origin);
   }
   rebuild();
