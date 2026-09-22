@@ -532,4 +532,234 @@ $\Delta<0$ & $\alpha\pm\mathrm{j}\beta$，$\beta>0$ & $e^{\alpha t}[C_1\cos(\bet
 特征根决定允许的模式，初始条件决定各模式的系数。非实根不意味着不稳定；负实部的共轭复根对应衰减振荡。根的虚部给出自由振荡频率，\textbf{谐振频率还要从幅频响应求取}，不能直接用虚部代替。
 \end{keybox}
 
+\newpage
+\section{极点图与根轨迹：从读图到调参}\label{app:poles-locus}
+
+附录 A 把微分方程变成了特征根。这次把根画出来，再观察控制器增益改变时根的位置怎样变化。学完后，你应能解释实验页中的两幅 $s$ 平面图，并把它们与阶跃响应联系起来。
+
+\subsection{极点图：把一个系统的根放到复平面}
+对已约去公共因子的传递函数 $H(s)=N(s)/D(s)$，使分母为零的数叫\textbf{极点}，使分子为零的数叫\textbf{零点}。例如
+\[
+  H(s)=\frac{s+4}{s^2+4s+13}
+  \quad\Rightarrow\quad
+  \text{极点 }-2\pm3\mathrm{j},\qquad \text{零点 }-4.
+\]
+在复平面写 $s=\sigma+\mathrm{j}\omega$：横轴是实部 $\sigma$，纵轴是虚部 $\omega$；通常用 $\times$ 标极点、用 $\circ$ 标零点。所以上面的两个极点分别画在 $(-2,3)$、$(-2,-3)$，零点画在 $(-4,0)$。实系数系统的非实极点成共轭对，因此上下对称。零点会改变输出响应的形状，但不能把零点的左右位置当作判断系统稳定性的依据。
+
+\begin{center}
+\begin{tikzpicture}[x=0.72cm,y=0.72cm,>=Latex,line width=0.8pt,font=\small]
+  \fill[soft] (-5,-4) rectangle (0,4.1);
+  \fill[orange!6] (0,-4) rectangle (2.1,4.1);
+  \draw[step=1,muted!15,very thin] (-5,-4) grid (2,4);
+  \draw[->,muted] (-5.2,0)--(2.4,0) node[right,text=ink] {$\sigma$};
+  \draw[->,muted] (0,-4.2)--(0,4.5) node[above,text=ink] {$\omega$};
+  \node[anchor=north east,text=muted] at (-0.08,-0.07) {$0$};
+  \node[anchor=south,text=accent,font=\footnotesize] at (-3.6,4.2) {左半平面：衰减};
+  \node[anchor=south,text=muted,font=\footnotesize] at (1.1,4.2) {增长};
+  \draw[dashed,muted] (-2,0)--(-2,3)--(0,3);
+  \draw[dashed,muted] (-2,0)--(-2,-3)--(0,-3);
+  \draw[accent,thick] (0,0)--(-2,3);
+  \node[rotate=-56,fill=soft,inner sep=1.5pt,text=accent] at (-1.15,1.75) {$\omega_n=\sqrt{13}$};
+  \node[accent,font=\Large] at (-2,3) {$\times$};
+  \node[accent,font=\Large] at (-2,-3) {$\times$};
+  \node[anchor=south east,fill=soft,inner sep=2pt,text=ink] at (-2.15,3.1) {$-2+3\mathrm{j}$};
+  \node[anchor=north east,fill=soft,inner sep=2pt,text=ink] at (-2.15,-3.1) {$-2-3\mathrm{j}$};
+  \draw[accent,thick,fill=white] (-4,0) circle (0.10);
+  \node[below,text=ink] at (-4,-0.15) {$-4$};
+  \node[below,text=ink] at (-2,-0.15) {$-2$};
+  \node[right,text=ink] at (0.05,3) {$3$};
+  \node[right,text=ink] at (0.05,-3) {$-3$};
+  \node[anchor=north west,text width=5.4cm,align=left,text=ink] at (3.5,3.4) {
+    \textbf{先读图例，再读坐标}\\[5pt]
+    $\times$：极点 $-2\pm3\mathrm{j}$\\[4pt]
+    $\circ$：零点 $-4$\\[8pt]
+    横坐标 $-2$：包络按 $e^{-2t}$ 衰减。\\[5pt]
+    纵坐标 $\pm3$：振荡角频率为 $3\,\mathrm{rad/s}$。\\[5pt]
+    两轴等比例；坐标单位为 $\mathrm{s^{-1}}$。横轴不是时间。
+  };
+\end{tikzpicture}
+\end{center}
+
+
+\textbf{这两条坐标轴都不是时间轴。}图上的一个点表示一个复数变化率，不是某时刻的位置、速度或输出大小；两点也不是小车往返运动的两个端点。
+
+\subsection{读一个点，就读出一种变化模式}
+沿用附录 A，$s=-2\pm3\mathrm{j}$ 对应自由响应中的
+\[
+  e^{-2t}\big[C_1\cos(3t)+C_2\sin(3t)\big].
+\]
+向左的距离 $2$ 给出包络 $e^{-2t}$，时间常数为 $\tau=1/2\unit{s}$；虚部大小 $3$ 给出振荡角频率 $3\unit{rad/s}$，周期为 $2\pi/3\approx2.09\unit{s}$。对于这一对二阶极点，还可读出
+\[
+  \omega_n=\sqrt{\sigma^2+\omega^2}=\sqrt{13}\unit{rad/s},
+  \qquad \zeta=\frac{-\sigma}{\omega_n}=\frac{2}{\sqrt{13}}\approx0.555.
+\]
+注意 $\omega_n$ 是点到原点的距离，$|\omega|$ 才是自由振荡角频率；两者通常不相等。
+
+\newpage
+\subsection{先看稳定性，再区分两种图}
+以下讨论有限维、连续时间线性时不变系统。全部内部特征根都在左半平面，初始扰动最终衰减；有根进入右半平面，就存在增长模式。虚轴是边界：虚轴上的单根可产生不衰减的自由运动，并不能据此称系统渐近稳定；虚轴重根还要检查是否产生随时间增长的项。未被相消的虚轴极点也不满足“有界输入产生有界输出”，例如持续同频正弦输入可导致共振增长。
+
+\textbf{不要用极零相消掩盖内部不稳定。}最简传递函数只反映该输入到输出的关系，约分可能隐藏内部模式。本实验的“当前极点图”保留闭环特征多项式的全部根；发生精确相消时，它与约分后的传递函数极点图可能不同。
+
+\begin{keybox}
+\textbf{极点图回答：这组参数下，根在哪里？}
+
+\textbf{根轨迹回答：固定开环形状，只连续改变一个整体增益，闭环根经过哪些位置？}
+\end{keybox}
+
+极点图是一张固定参数的快照；根轨迹把同一族系统的许多快照连起来。轨迹上的箭头表示增益增大的方向，\textbf{不是时间流逝的方向}。选定一个增益后，实际系统的极点就固定下来，不会沿着图中的曲线随时间移动。
+
+\subsection{根轨迹为什么求的是闭环特征方程？}
+设固定的开环形状为 $L_0(s)=N(s)/D(s)$，在其前面乘整体增益 $\kappa\ge0$。单位负反馈给出
+\[
+  T_\kappa(s)=\frac{\kappa L_0(s)}{1+\kappa L_0(s)}
+  =\frac{\kappa N(s)}{D(s)+\kappa N(s)}.
+\]
+因此，每选一个 $\kappa$，就求一次\textbf{闭环特征方程}
+\[
+  \boxed{D(s)+\kappa N(s)=0.}
+\]
+根轨迹描绘这些根随 $\kappa$ 的变化。开环极点是 $D(s)=0$ 的根，闭环根则随反馈增益变化，不能把二者混为一谈。
+
+在 $N,D$ 无公共因子、$L_0$ 严格真有理的通常情形，若分母次数为 $n$、分子次数为 $m<n$，根轨迹有 $n$ 条分支（按重数计）。当 $\kappa\to0$，它们趋近开环极点；当 $\kappa\to\infty$，其中 $m$ 条趋近有限开环零点，其余走向无穷远。$\kappa=0$ 时 $T_0(s)=0$，所以起点应理解为\textbf{特征根的极限}，而不是零传递函数中可见的输出极点。
+
+\newpage
+\subsection{亲手算一条根轨迹}
+先选比 PID 更容易手算的对象 $G_0(s)=1/[(s+1)(s+3)]$，控制器只有比例增益 $C(s)=\kappa$，采用单位负反馈。于是
+\[
+  T_\kappa(s)=\frac{\kappa}{s^2+4s+3+\kappa},
+  \qquad s_{1,2}=-2\pm\sqrt{1-\kappa}.
+\]
+只需替换五个增益，就能自己画出轨迹的骨架：
+
+\noindent
+\begin{tabularx}{\linewidth}{@{}p{22mm}p{46mm}Y@{}}
+\toprule
+$\kappa$ & 闭环特征根 & 读图结论 \\
+\midrule
+$0$（极限） & $-1,\,-3$ & 从两个开环极点出发 \\
+$0.75$ & $-1.5,\,-2.5$ & 沿实轴相向靠近 \\
+$1$ & $-2$（二重根） & 在实轴上汇合 \\
+$2$ & $-2\pm\mathrm{j}$ & 离开实轴，上下对称 \\
+$5$ & $-2\pm2\mathrm{j}$ & 虚部增大，实部仍为 $-2$ \\
+\bottomrule
+\end{tabularx}
+\par
+
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,>=Latex,line width=0.8pt,font=\small]
+  \fill[soft] (-4.3,-2.9) rectangle (0,2.9);
+  \draw[step=1,muted!15,very thin] (-4,-2) grid (0,2);
+  \draw[->,muted] (-4.4,0)--(0.7,0) node[right,text=ink] {$\sigma$};
+  \draw[->,muted] (0,-3)--(0,3.2) node[above,text=ink] {$\omega$};
+  \node[below right,text=ink] at (0,0) {$0$};
+  \draw[accent,very thick] (-3,0)--(-1,0);
+  \draw[->,accent,very thick] (-2,0)--(-2,2.8);
+  \draw[->,accent,very thick] (-2,0)--(-2,-2.8);
+  \draw[->,accent,very thick] (-2.9,0)--(-2.45,0);
+  \draw[->,accent,very thick] (-1.1,0)--(-1.55,0);
+  \node[text=ink,font=\Large] at (-3,0) {$\times$};
+  \node[text=ink,font=\Large] at (-1,0) {$\times$};
+  \node[below=5pt,text=ink] at (-3,0) {$-3$};
+  \node[below=5pt,text=ink] at (-1,0) {$-1$};
+  \fill[accent] (-2,0) circle (0.045);
+  \node[anchor=south east,text=ink,fill=soft,inner sep=2pt] at (-2.18,0.18) {$\kappa=1$};
+  \node[anchor=north east,text=muted] at (-2.1,-0.15) {$-2$};
+  \fill[accent] (-2,1) circle (0.065);
+  \fill[accent] (-2,-1) circle (0.065);
+  \node[right,text=ink] at (-1.88,1) {$\kappa=2$};
+  \node[right,text=ink] at (-1.88,-1) {$\kappa=2$};
+  \fill[accent] (-2,2) circle (0.065);
+  \fill[accent] (-2,-2) circle (0.065);
+  \node[right,text=ink] at (-1.88,2) {$\kappa=5$};
+  \node[right,text=ink] at (-1.88,-2) {$\kappa=5$};
+  \node[anchor=north west,text width=5.4cm,align=left,text=ink] at (1.5,2.65) {
+    \textbf{沿箭头增大 $\kappa$}\\[6pt]
+    1. 从开环极点 $-3$、$-1$ 出发。\\[6pt]
+    2. 在 $-2$ 相遇，形成二重根。\\[6pt]
+    3. 变成共轭复根，沿竖直线离开实轴。\\[8pt]
+    $\times$ 是开环起点；蓝线上的点是不同增益下的闭环根。\\[6pt]
+    图只画有限区域，向上下的分支继续延伸。
+  };
+\end{tikzpicture}
+\end{center}
+
+
+在 $0<\kappa<1$ 时，靠近虚轴的慢极点向左移动；越过 $\kappa=1$ 后，两根沿 $\sigma=-2$ 的竖线分开。此时
+\[
+  \tau=\frac12\unit{s},\qquad
+  \omega_d=\sqrt{\kappa-1},\qquad
+  \zeta=\frac{2}{\sqrt{3+\kappa}}.
+\]
+因此，继续增加增益会使振荡频率升高、阻尼比下降，包络时间常数却不再缩短。增益越大并不保证收敛越快；该系统的单位阶跃终值 $\kappa/(3+\kappa)$ 也随增益变化。判断跟踪效果时，还要一起检查稳态误差和完整响应。
+
+\newpage
+\subsection{把读图方法放回现有实验}
+实验对象是 $G(s)=4/(s^2+1.2s+4)$。仅用 P 控制时，令 $K_i=K_d=0$，有
+\[
+  T(s)=\frac{4K_p}{s^2+1.2s+4+4K_p},
+  \qquad s_{1,2}=-0.6\pm\mathrm{j}\sqrt{3.64+4K_p}
+  \quad(K_p\ge0).
+\]
+当 $K_p=1,3,8$ 时，极点分别约为 $-0.6\pm2.764\mathrm{j}$、$-0.6\pm3.955\mathrm{j}$、$-0.6\pm5.970\mathrm{j}$。它们只是上下分开，没有向左移动；振荡包络的时间常数始终为 $1/0.6\approx1.67\unit{s}$，单位阶跃终值则依次为 $0.5,0.75,8/9$。
+
+\textbf{实验页里的 $\kappa$ 与 $K_p$ 不是两个名称相同的滑块。}当前 PID 为
+\[
+  C(s)=K_p+\frac{K_i}{s}+K_ds,
+\]
+根轨迹固定当前的 $K_p:K_i:K_d$，扫描的是 $\kappa C(s)G(s)$，即三个增益一起乘 $\kappa$。图中实心点标记 $\kappa=1$，正好对应当前控制器，应与“当前极点图”的特征根重合。
+
+单独改变 $K_p$、$K_i$ 或 $K_d$，通常会改变控制器零点和开环形状，所以软件会重新计算一族根轨迹。\textbf{纯 P 是一个例外：}正的 $K_p$ 只改变整体比例，此时有效增益是 $\kappa K_p$；若都扫描到无穷大，轨迹的几何形状相同，只是增益标尺不同。实验只画所选的有限 $\kappa$ 范围，所以显示出的轨迹长度仍会改变。
+
+\begin{keybox}
+极点告诉你可能出现哪些衰减或振荡模式，\textbf{不能单独给出完整阶跃响应}。零点、各模式的系数（残差）、输入和初始条件都会影响输出；PID 还可能引入第三个极点。因此，配置一对目标极点后，不能直接把标准二阶超调公式当作完整 PID 闭环的仿真结果。
+\end{keybox}
+
+\newpage
+\subsection{打开实验页，完成三步观察}
+进入\href{https://youngx-ray.github.io/labs/second-order-pid/}{PID 极点配置实验}。每次先预测极点移动方向，再改参数，最后核对阶跃曲线。可以点击“固定当前响应作对照”，保留改动前的曲线。
+
+\textbf{第一步：只加比例，检查“频率变快”和“衰减变快”。}
+点击“P”，确认 $K_i=K_d=0$，依次把“比例 $K_p$”数值设为 $1,3,8$。记录极点实部、虚部与阶跃终值。你应看到实部始终为 $-0.6$，波峰间隔缩短，但包络没有因实部左移而加快衰减。根轨迹的实心点始终表示当前 $\kappa=1$；把右上角 $\kappa$ 上限从 $1$ 改为 $5$，只是多看一段轨迹，不会改动当前阶跃响应。
+
+\textbf{第二步：加入微分，让实部发生变化。}
+点击“PD”，再设 $K_p=2$、$K_i=0$，依次尝试 $K_d=0,0.3,0.75$。此时闭环特征方程为
+\[
+  s^2+(1.2+4K_d)s+12=0.
+\]
+这三组参数下，两根仍为共轭复根，实部依次是 $-0.6,-1.2,-2.1$，对应越来越快的包络衰减。观察零点也随之变化，再查看实际超调。继续无限增大微分并不保证更快：进入过阻尼后，可能出现一个靠近原点的慢极点。
+
+\textbf{第三步：加入积分，亲眼看极点穿过虚轴。}
+点击“PI”，设 $K_p=2$、$K_d=0$，把 $K_i$ 依次设为 $3,3.6,4$。特征方程及稳定条件为
+\[
+  s^3+1.2s^2+12s+4K_i=0,
+  \qquad 0<K_i<3.6.
+\]
+预期结果：$K_i=3$ 时三根都在左半平面，阶跃输出最终趋于 $1$；$K_i=3.6$ 时分母为 $(s+1.2)(s^2+12)$，有一对虚轴根 $\pm\mathrm{j}\sqrt{12}$，振荡不再衰减；$K_i=4$ 时一对根进入右半平面，出现增长振荡。把“观察时长”改为 $60\unit{s}$ 更容易看出区别。\textbf{稳态误差为零的结论以闭环稳定为前提}，不能套用于后两种情况。
+
+\newpage
+\subsection{四道自测：先判断，再核对}
+\begin{itemize}
+  \item \textbf{题 1：}图上极点为 $-1\pm2\mathrm{j}$，零点为 $-5$。分别画在哪里？振荡包络时间常数和周期是多少？
+  \item \textbf{题 2：}两组极点分别为 $-1\pm2\mathrm{j}$ 与 $-1\pm5\mathrm{j}$。哪组自由振荡更快？哪组指数包络衰减更快？
+  \item \textbf{题 3：}在 B.5 的手算系统中，取 $\kappa=10$，求根并判断稳定性。轨迹上的点会随时间跑向上方吗？
+  \item \textbf{题 4：}实验中固定 $K_p=2,K_d=0$，把 $K_i$ 从 $3$ 改为 $4$。这是否只是沿原先固定 PID 比例的根轨迹移动？新闭环是否稳定？
+\end{itemize}
+
+\textbf{答案 1：}在 $(-1,2)$ 与 $(-1,-2)$ 画 $\times$，在 $(-5,0)$ 画 $\circ$。极点对应包络 $e^{-t}$，所以 $\tau=1\unit{s}$，周期为 $2\pi/2=\pi\unit{s}$。零点不应被当作另一个自由响应模式。
+
+\textbf{答案 2：}第二组振荡更快，周期从 $\pi$ 缩短到 $2\pi/5$；两组指数包络都是 $e^{-t}$，衰减时间常数相同。但完整输出的振幅、超调和实际进入调节带的时间，还取决于传递函数及输入。
+
+\textbf{答案 3：}$s=-2\pm\sqrt{1-10}=-2\pm3\mathrm{j}$，两根都在左半平面，闭环稳定。选定 $\kappa=10$ 后极点固定；响应随时间变化，极点坐标不会沿根轨迹运动。
+
+\textbf{答案 4：}不是。只改 $K_i$ 改变了 PID 比例和控制器零点，需重新生成根轨迹。原条件要求 $K_i<3.6$，因此 $K_i=4$ 的闭环不稳定。应同时看到当前极点进入右半平面、阶跃响应振荡增长。
+
+\begin{keybox}
+\textbf{读图顺序：先认对象和坐标，再看左右与上下。}
+
+确认图画的是开环极点、闭环特征根，还是闭环零点；横看衰减或增长，纵看振荡频率。若有轨迹，再问“固定了什么、扫描哪个增益、当前点在哪里”。最后回到阶跃响应，核对稳态误差、超调和收敛过程。
+\end{keybox}
+
+符号约定与根轨迹定义可参见 MathWorks 官方文档：\href{https://www.mathworks.com/help/control/ref/lti.pzmap.html}{极点与零点图 pzmap}、\href{https://www.mathworks.com/help/control/ref/dynamicsystem.rlocus.html}{根轨迹 rlocus}。
+
 \end{document}

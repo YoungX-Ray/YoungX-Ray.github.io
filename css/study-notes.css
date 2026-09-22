@@ -1,0 +1,3 @@
+/* Keep this tutorial above Butterfly's dark background overlay. */
+#post:has(#appendix-poles-root-locus){position:relative;z-index:0}
+#post:has(#appendix-poles-root-locus) #article-container img[src$="-guide.svg"]{width:100%;max-width:740px;background:#fff;border-radius:8px}
