@@ -1,0 +1,38 @@
+/* Navigation hubs inherit the existing Butterfly light/dark palette. */
+/* Keep hub content above the theme's dark background overlay. */
+#page:has(.xr-hub){position:relative;z-index:0;background:var(--card-bg,#fff);color:var(--font-color,#344256)}
+.xr-home-entry{position:relative;z-index:0}
+#page:has(.xr-hub)>.page-title{color:var(--font-color,#344256)}
+#recent-posts .recent-post-item .recent-post-info>.content{display:block;-webkit-line-clamp:unset;overflow:visible;height:auto}
+#recent-posts .recent-post-item:has(.recent-post-info.no-cover){height:auto;min-height:16.8em}
+.xr-hub{--xr-accent:var(--theme-color,#2679bb);--xr-border:var(--light-grey,#dfe6ee);color:var(--font-color,#344256);line-height:1.8}
+#article-container .xr-hub p{margin:0 0 12px}
+.xr-hub .xr-kicker,.xr-home-entry .xr-kicker{font-size:12px;letter-spacing:.12em;color:var(--xr-accent,var(--theme-color,#2679bb));font-weight:600}
+.xr-hub .xr-intro{max-width:760px;margin-bottom:24px}
+.xr-hub .xr-lead{font-size:16px;line-height:1.9}
+.xr-hub .xr-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:22px 0}
+.xr-hub .xr-grid--two{grid-template-columns:repeat(2,minmax(0,1fr))}
+.xr-hub .xr-card{min-width:0;border:1px solid var(--xr-border);border-radius:12px;padding:23px 22px;background:var(--card-bg,#fff);display:flex;flex-direction:column}
+.xr-hub>.xr-card+.xr-card{margin-top:20px}
+#article-container .xr-hub .xr-card h2,#article-container .xr-hub .xr-card h3{margin:6px 0 14px;font-size:21px;line-height:1.5}
+#article-container .xr-hub .xr-card p{font-size:14px;line-height:1.85}
+.xr-hub .xr-meta,.xr-hub .xr-note{color:var(--font-color,#596a7b);font-size:13px}
+.xr-hub .xr-meta{padding-top:8px;border-top:1px solid var(--xr-border);margin-top:8px}
+.xr-hub .xr-actions{display:flex;align-items:center;flex-wrap:wrap;gap:10px 16px;margin-top:auto;padding-top:16px}
+#article-container .xr-hub a.xr-button,.xr-home-entry a.xr-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:8px 17px;background:var(--xr-accent,var(--theme-color,#2679bb));border:1px solid var(--xr-accent,var(--theme-color,#2679bb));border-radius:7px;color:#fff;font-size:14px;text-decoration:none;line-height:1.6;white-space:normal;min-height:40px}
+#article-container .xr-hub a.xr-button:hover,.xr-home-entry a.xr-button:hover{filter:brightness(.93);color:#fff}
+#article-container .xr-hub a.xr-button--secondary{background:transparent;color:var(--xr-accent);border-color:var(--xr-border)}
+#article-container .xr-hub a.xr-button::after{display:none}
+.xr-hub a:focus-visible,.xr-home-entry a:focus-visible{outline:3px solid var(--xr-accent,var(--theme-color,#2679bb));outline-offset:4px}
+.xr-hub .xr-links{display:flex;flex-wrap:wrap;gap:12px 24px;padding:15px 0;border-top:1px solid var(--xr-border);margin-top:24px}
+.xr-hub .xr-section{margin-top:28px}
+.xr-hub .xr-section h2{margin:0 0 12px;font-size:20px}
+.xr-hub .xr-note{padding:14px 18px;border-left:3px solid var(--xr-accent);background:var(--blockquote-bg,#eef6fd);border-radius:0 7px 7px 0;margin:20px 0}
+.xr-home-entry{box-sizing:border-box;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px;background:var(--card-bg,#fff);color:var(--font-color,#344256);border-radius:12px;box-shadow:var(--card-box-shadow);padding:24px 28px;margin:0 0 20px}
+.xr-home-entry h2{font-size:21px;line-height:1.5;margin:3px 0 7px;color:var(--font-color,#344256)}
+.xr-home-entry p{font-size:14px;margin:0;line-height:1.8}
+.xr-home-entry .xr-home-links{display:flex;gap:10px 20px;flex-wrap:wrap;font-size:13px;margin-top:12px}
+.xr-home-entry .xr-home-links a{color:var(--theme-color,#2679bb)}
+[data-theme=dark] .xr-hub{--xr-border:#3b4654}
+@media(max-width:960px){.xr-hub .xr-grid{grid-template-columns:1fr}.xr-hub .xr-card{padding:20px}.xr-hub .xr-actions{margin-top:4px}}
+@media(max-width:600px){.xr-home-entry{padding:20px;gap:14px}.xr-home-entry>a.xr-button{width:100%}.xr-hub .xr-card{padding:18px}.xr-hub .xr-grid{gap:14px;margin:18px 0}.xr-hub .xr-actions{gap:12px}.xr-hub .xr-links{gap:10px 18px}}
