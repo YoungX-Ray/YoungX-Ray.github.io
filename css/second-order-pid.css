@@ -1,0 +1,7 @@
+#pid-demo{scroll-margin-top:85px}
+second-order-pid{display:block;margin:22px 0;padding:16px 14px 8px;border:1px solid var(--light-grey,#dce4ee);border-radius:12px;background:var(--card-bg,#fff);color:var(--font-color,#344256)}
+second-order-pid .sop-top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px 18px;font-size:14px}
+second-order-pid .sop-top a{font-size:12px}
+#article-container second-order-pid .sop-description{margin:8px 0;font-size:12px;line-height:1.7}
+#article-container second-order-pid iframe{display:block;width:100%;height:1400px;margin:0;border:0;border-radius:0;background:transparent}
+@media(max-width:600px){second-order-pid{padding:12px 6px 6px;margin:18px -4px}#article-container second-order-pid iframe{height:2400px}}

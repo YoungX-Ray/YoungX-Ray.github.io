@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>二阶系统 · PID 极点配置实验</title>
+  <link rel="stylesheet" href="lab.css">
+  <link rel="stylesheet" href="embed.css">
+  <script defer src="embed-bridge.js"></script>
+  <script defer src="control-engine.js"></script>
+  <script defer src="lab.js"></script>
+</head>
+<body>
+<header class="topbar"><a href="/notes/second-order-system-review/#pid-demo">← 二阶系统基础复习</a><span>基础知识储备 <b>/</b> 控制实验室</span><a href="#theory">原理与练习 ↓</a></header>
+<main>
+  <div class="intro"><div><div class="eyebrow">CONTROL LAB &nbsp; / &nbsp; 07</div><h1>让极点移动，看响应改变。</h1><p>从一个二阶对象出发，用 PID 把期望的动态特性变成具体参数。</p></div><div class="plant"><span>本实验的被控对象</span><strong>G(s) = <span class="fraction"><span>4</span><span>s² + 1.2s + 4</span></span></strong><small>ζ = 0.3 · ωₙ = 2 rad/s · 零初始条件</small></div></div>
+  <div class="loop" aria-label="单位负反馈框图"><span>参考 r</span><span>→</span><span class="sum">＋<small>− y</small></span><span>→</span><span class="block">C(s) = Kp + Ki/s + Kd·s</span><span>→</span><span class="block">G(s)</span><span>→</span><span>输出 y</span><span class="feedback">↶ 单位负反馈，微分作用于误差 e = r − y</span></div>
+  <div class="workspace">
+    <aside class="controls">
+      <div class="section-label"><span>01</span><h2>调节控制器</h2></div>
+      <div class="presets" role="group" aria-label="控制器预设">
+        <button data-preset="p" aria-pressed="true">P</button><button data-preset="pd" aria-pressed="false">PD</button><button data-preset="pi" aria-pressed="false">PI</button><button data-preset="pid" aria-pressed="false">PID 配置</button><button data-preset="unstable" aria-pressed="false">失稳例子</button>
+      </div>
+      <p id="preset-note" class="subtle">先观察：只有比例控制时，输出不能到达 1。</p>
+      <div class="gain-control"><label for="kp">比例 Kp</label><input id="kp-number" type="number" step="0.01" min="-1000" max="1000" value="1" aria-label="比例增益 Kp 数值"><input id="kp" type="range" min="0" max="30" step="0.01" value="1"><small>二阶式中改变常数项，三阶式中改变一次项</small></div>
+      <div class="gain-control"><label for="ki">积分 Ki</label><input id="ki-number" type="number" step="0.01" min="-1000" max="1000" value="0" aria-label="积分增益 Ki 数值"><input id="ki" type="range" min="0" max="60" step="0.01" value="0"><small>Ki ≠ 0 时引入第三个闭环特征根</small></div>
+      <div class="gain-control"><label for="kd">微分 Kd</label><input id="kd-number" type="number" step="0.01" min="-1000" max="1000" value="0" aria-label="微分增益 Kd 数值"><input id="kd" type="range" min="0" max="8" step="0.01" value="0"><small>二阶式中改变一次项，三阶式中改变二次项</small></div>
+      <p class="error" id="input-error" role="alert"></p>
+      <div class="placement">
+        <div class="section-label"><span>02</span><h2>从目标极点反算 PID</h2></div>
+        <div class="target-fields"><label for="zeta">目标阻尼比 ζ<input id="zeta" type="number" min="0.1" max="2" step="0.05" value="0.7"></label><label for="wn">自然频率 ωₙ <small>rad/s</small><input id="wn" type="number" min="0.5" max="8" step="0.1" value="3"></label><label for="third">第三极点 −p <small>s⁻¹</small><input id="third" type="number" min="0.5" max="30" step="0.5" value="8"></label></div>
+        <p class="target-preview" id="target-preview"></p>
+        <button id="place" class="primary">计算 PID 并应用 <span>↗</span></button>
+        <p class="subtle">目标三次式：(s² + 2ζωₙs + ωₙ²)(s + p)</p>
+      </div>
+      <button id="pin" class="secondary">固定当前响应作对照</button><button id="clear-pin" class="text-button" hidden>清除对照</button>
+    </aside>
+    <section class="results" aria-label="联动实验结果">
+      <div class="result-header"><div><span class="live-dot"></span><strong id="controller-name">P 控制</strong><span id="order-label">二阶闭环</span></div><span id="stability" role="status">稳定</span></div>
+      <div class="step-panel panel">
+        <div class="chart-title"><h2>单位阶跃响应</h2><label for="duration">观察时长 <select id="duration"><option value="6">6 s</option><option value="12" selected>12 s</option><option value="24">24 s</option><option value="60">60 s</option></select></label></div>
+        <div class="legend"><span><i class="line current"></i>当前闭环</span><span><i class="line plant-line"></i>原对象 G(s)，未加反馈</span><span><i class="line reference"></i>参考 r = 1</span><span id="pin-legend" hidden><i class="line saved"></i>固定对照</span></div>
+        <div class="chart-wrap"><svg id="step-chart" role="img" aria-label="原对象、当前闭环与单位参考的阶跃响应对比"></svg><div id="step-tooltip" class="tooltip" hidden></div></div>
+        <div class="metrics"><div><span>稳态误差 e∞ = 1 − y∞</span><strong id="error-value">—</strong></div><div><span>相对自身终值的超调</span><strong id="overshoot-value">—</strong></div><div><span>进入自身终值 ±2% 的时间</span><strong id="settling-value">—</strong></div></div>
+        <p id="response-note" class="chart-note"></p>
+      </div>
+      <div class="small-charts">
+        <div class="panel"><div class="chart-title"><h2>当前极点图</h2><span class="subtle">s 平面</span></div><div class="legend compact"><span><b class="cross">×</b>闭环特征根</span><span><b class="circle">○</b>闭环零点</span><span id="target-legend" hidden><b class="diamond">◇</b>配置目标</span></div><svg id="pole-chart" role="img" aria-label="当前闭环特征根与零点在复平面上的位置"></svg><div id="pole-values" class="pole-values"></div><p class="chart-note">左半平面表示衰减；虚部决定振荡频率。两轴等比例。</p></div>
+        <div class="panel"><div class="chart-title"><h2>根轨迹</h2><label for="locus-max">κ：0 → <select id="locus-max"><option value="1" selected>1</option><option value="5">5</option><option value="20">20</option><option value="100">100</option></select></label></div><div class="legend compact"><span><i class="line locus"></i>κ 增大时的轨迹</span><span><b class="locus-current">●</b>κ = 1</span></div><svg id="locus-chart" role="img" aria-label="固定 PID 比例、整体增益 kappa 变化时的闭环根轨迹"></svg><p class="chart-note">固定当前 Kp : Ki : Kd，扫描 κC(s)G(s)。× 开环极点，○ 开环零点；只显示所选有限 κ 范围，可增大上限继续观察。</p></div>
+      </div>
+      <div class="equation-bar"><span>当前闭环 T(s) = Y(s) / R(s)</span><div id="transfer"></div><small id="model-note"></small></div>
+    </section>
+  </div>
+  <section id="theory" class="theory">
+    <div class="eyebrow">UNDERSTAND THE MOTION</div><h2>从调参数，走到配置极点</h2>
+    <div class="lesson-grid"><article><span class="lesson-number">01 / 先看 P 和 PD</span><h3>极点左移，衰减通常更快</h3><p>点击 P，然后增加 Kp：这时极点实部一直是 −0.6，振荡频率升高，却不能只凭 Kp 增大就断言更快收敛。再增加 Kd，观察极点实部和超调怎样变化。</p><p>Ki = 0 时，闭环分母为 <code>s² + (1.2 + 4Kd)s + 4 + 4Kp</code>。P 和 PD 的稳态输出是 Kp/(1 + Kp)，一般存在阶跃跟踪误差。</p></article><article><span class="lesson-number">02 / 再加入积分</span><h3>消除误差，同时多配置一个极点</h3><p>点击 PI，观察输出趋于 1。积分能在闭环稳定时消除阶跃稳态误差，但 Ki 太大会让极点越过虚轴。点击“失稳例子”验证这一点。</p><p>Ki ≠ 0 时，特征多项式为 <code>s³ + (1.2 + 4Kd)s² + (4 + 4Kp)s + 4Ki</code>。三阶 Hurwitz 条件：各项系数为正，且 <code>(1.2 + 4Kd)(4 + 4Kp) > 4Ki</code>。</p></article><article><span class="lesson-number">03 / 用目标反算 PID</span><h3>三个系数，对应三个增益</h3><p>将目标二阶因子乘上 (s + p)，逐项比较系数，即得：</p><div class="formula-list"><code>Kd = (2ζωₙ + p − 1.2) / 4</code><code>Kp = (ωₙ² + 2ζωₙp − 4) / 4</code><code>Ki = pωₙ² / 4</code></div><p>试一试 ζ = 0.7、ωₙ = 3、p = 8。点击“计算 PID 并应用”，验证特征根到达 −2.1 ± j2.142 与 −8。</p></article></div>
+    <details><summary>为什么配置了 ζ = 0.7，超调不一定等于标准二阶公式？</summary><p>真实闭环还包含第三个极点和 PID 引入的零点。标准二阶超调公式只直接适用于无零点的标准二阶传递函数；本页用完整闭环计算阶跃响应，没有用该公式代替仿真。图中的目标 ζ、ωₙ 只描述目标二阶因子。把第三极点放得很远也不等于零点影响消失。</p><p>极点图绘制闭环特征多项式的根。若发生精确零极点相消，输入到输出的最小传递函数阶次可能更低，但内部特征模态仍可能存在。例如 Kp = 1.2、Ki = 4、Kd = 1 时，T(s) 可约为 4/(s+4)。</p></details>
+    <details><summary>根轨迹与“拖动 PID 滑块”的区别是什么？</summary><p>根轨迹针对一个固定的开环形状 L(s) = C(s)G(s)，只改变整体比例 κ，求 1 + κL(s) = 0 的根。改变 Kp、Ki、Kd 中某一个会改变零点及开环形状，因此会重新生成一组根轨迹。图中实心点总是 κ = 1，也就是当前控制器。κ → 0 的端点为开环极点；Ki = 0 时使用二阶表达式，不人为添加原点极点。</p></details>
+    <details><summary>这个实验采用什么 PID 模型？</summary><p>本页采用连续时间、理想并联 PID，微分作用于误差；不包含执行器饱和、采样或微分滤波。单位阶跃会使理想微分项产生控制冲击，响应计算已计入其作用，输出 y 本身连续。实际带滤波的微分会增加动态阶次，不能直接沿用这里的三阶系数匹配。</p><p>超调与调节时间按当前时间窗采样计算，调节带相对于输出自身终值；“窗口内未确认”表示需延长观察，不代表系统一定不稳定。原对象曲线表示把同样单位阶跃直接输入 G(s)，用途是比较动态形状，不表示闭环跟踪基准。</p></details>
+    <div class="reading"><span>继续阅读：<a href="/downloads/second-order-system-review/pid-pole-placement.md">完整推导与练习笔记</a> · <a href="/downloads/second-order-system-review/second-order-system-review.pdf">原二阶系统讲义</a></span><span>参考：<a href="https://ctms.engin.umich.edu/CTMS/index.php?example=Introduction&amp;section=ControlPID" target="_blank" rel="noopener">CTMS · PID</a> / <a href="https://ctms.engin.umich.edu/CTMS/index.php?example=Introduction&amp;section=ControlRootLocus" target="_blank" rel="noopener">Root locus</a></span></div>
+  </section>
+</main>
+<footer>二阶系统基础知识 / 本地交互实验 <span>连续时间 · 单位负反馈 · 单位阶跃</span></footer>
+<noscript>请启用 JavaScript 以计算 PID、极点和阶跃响应；下方学习文字仍可直接阅读。</noscript>
+</body>
+</html>

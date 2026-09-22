@@ -1,0 +1,29 @@
+/* Compact article layout. The full laboratory keeps its original layout. */
+html[data-embedded] body{background:transparent}
+html[data-embedded] .topbar,html[data-embedded] .intro,html[data-embedded] .loop,html[data-embedded] .theory,html[data-embedded] footer{display:none}
+html[data-embedded] main{max-width:none;padding:8px 0 10px}
+html[data-embedded] .workspace{display:block}
+html[data-embedded] .controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;padding:16px;margin-bottom:18px;box-shadow:none}
+html[data-embedded] .controls>.section-label,html[data-embedded] .controls>.presets,html[data-embedded] #preset-note,html[data-embedded] #input-error,html[data-embedded] .placement{grid-column:1/-1}
+html[data-embedded] .controls>.section-label{margin-bottom:0}
+html[data-embedded] #preset-note{margin:0;min-height:0}
+html[data-embedded] .gain-control{grid-template-columns:minmax(0,1fr) 65px;gap:4px;margin:5px 0}
+html[data-embedded] .gain-control input[type=number]{width:65px;padding:3px}
+html[data-embedded] .gain-control small{display:none}
+html[data-embedded] .placement{margin:4px 0 0;padding-top:12px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px 14px;align-items:center}
+html[data-embedded] .placement>.section-label{grid-column:1/-1;margin:0 0 3px}
+html[data-embedded] .target-fields{grid-column:1/-1;grid-template-columns:repeat(3,minmax(0,1fr))}
+html[data-embedded] .target-fields>label:last-child{grid-column:auto;display:block}
+html[data-embedded] .target-fields>label:last-child input{width:100%;margin-top:3px}
+html[data-embedded] .target-preview{min-height:0;margin:0}
+html[data-embedded] .placement>.subtle{grid-column:1/-1;margin:0}
+html[data-embedded] #pin{grid-column:1/3;margin:0;max-width:240px}
+html[data-embedded] #clear-pin{margin:0;justify-self:start}
+html[data-embedded] .small-charts{grid-template-columns:repeat(2,minmax(0,1fr))}
+html[data-embedded] .small-charts svg{height:250px}
+html[data-embedded] .panel{box-shadow:none;padding:13px 10px}
+html[data-blog-theme=light]{color-scheme:light;--bg:#f7f8fa;--paper:#fff;--ink:#202f3f;--muted:#596a7b;--line:#dde4ec;--blue:#1a66db;--blue-soft:#edf3ff;--green:#147966;--purple:#8366ba;--danger:#bd3944;--neutral:#8d99a7;--grid:#edf0f4;--right:#fdf0f0;--control:#f5f7fa}
+html[data-blog-theme=dark]{color-scheme:dark;--bg:#141c26;--paper:#1b2633;--ink:#e2eaf4;--muted:#acbbcc;--line:#344456;--blue:#79adff;--blue-soft:#263951;--green:#7bd2bb;--purple:#c0a3ff;--danger:#ffa0a8;--neutral:#8699af;--grid:#2a3747;--right:#392831;--control:#222f3e}
+html[data-blog-theme=light] .primary{color:#fff}html[data-blog-theme=dark] .primary{color:#152236}
+html[data-blog-theme=light] .presets button[aria-pressed=true]{color:#fff}html[data-blog-theme=dark] .presets button[aria-pressed=true]{color:#172331}
+@media(max-width:540px){html[data-embedded] .controls{padding:12px;gap:8px}html[data-embedded] .gain-control{grid-template-columns:1fr}html[data-embedded] .gain-control input[type=number]{width:100%}html[data-embedded] .gain-control>label{font-size:12px}html[data-embedded] .small-charts{grid-template-columns:1fr}html[data-embedded] .placement{grid-template-columns:1fr}html[data-embedded] .placement>.primary{grid-column:1/-1}html[data-embedded] .result-header{align-items:flex-start;flex-wrap:wrap}html[data-embedded] .target-fields>label{font-size:10px}html[data-embedded] .metrics{gap:7px}html[data-embedded] .metrics strong{font-size:16px}}
